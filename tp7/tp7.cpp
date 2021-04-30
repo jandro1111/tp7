@@ -3,7 +3,7 @@
 #include <list>
 #include <curl/curl.h>
 #include "json.hpp"
-
+#include"mylcd.h"
 //Vamos a usar la librería NLOHMANN JSON 
 using json = nlohmann::json;
 
@@ -21,8 +21,9 @@ static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp)
 
 int main(void)
 {
+	mylcd a1;
 	json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
-
+	
 	// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
 	// (HTTP seguro) el cual requeire un protocolo especial de encriptación
 	// más complejo que el plain HTTP que utilizamos en el TP de Networking.
