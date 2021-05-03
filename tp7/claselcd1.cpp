@@ -1,12 +1,5 @@
 #include "claselcd1.h"
 
-basicLCD::basicLCD() {
-
-}
-basicLCD::~basicLCD() {
-
-}
-
 claselcd1::claselcd1()
 {
 	display = NULL; fuente = NULL;
@@ -228,20 +221,4 @@ bool claselcd1::lcdDisplayUpdate()	//Actualiza el display
 	}
 	al_flip_display();
 	return true;
-}
-
-// error lcd
-lcdError::lcdError() {
-	errorcode = 0;
-	errordesc = "OK";
-	errorname = "OK";
-}
-std::string lcdError::getErrorName() {
-	return errorname;
-}
-std::string lcdError::getErrorDescription() {
-	return errordesc;
-}
-unsigned long lcdError::getErrorCode() {
-	return errorcode;
 }

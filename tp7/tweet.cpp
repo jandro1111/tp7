@@ -385,7 +385,7 @@ void printNames(std::list<std::string> names)//      modificar esto para lcd
 	for (auto c : names)
 	{
 		//Eliminamos el URL al final para mostrar
-		int extended = c.find("https");
+		int extended = (int)c.find("https");
 		c = c.substr(0, extended);
 		c.append("...");
 		/*mylcd j;
