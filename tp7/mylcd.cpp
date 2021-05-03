@@ -50,7 +50,7 @@ bool mylcd::lcdClearToEOL() {
 }
 basicLCD& mylcd::operator<<( const unsigned char c)
 {
-	if ((c >= ' ') && (c <= '~')) {//si es un caracter imprimible
+	if ((c >= ' ') && (c <= 254)) {//si es un caracter imprimible
 		this->disp[this->cursor.row][this->cursor.column] = c;
 		if (this->lcdMoveCursorRight()) {//si pude moverlo a la derecha
 		}

@@ -4,22 +4,24 @@
 
 #include <iostream>
 
+using namespace std;
 
 struct cursorPosition
 {
 	int row;
 	int column;
 };
+
 class lcdError
 {
 public:
 	lcdError();
-	std::string getErrorName();
-	std::string getErrorDescription();
+	string getErrorName();
+	string getErrorDescription();
 	unsigned long getErrorCode();
 private:
-	std::string errorname;
-	std::string errordesc;
+	string errorname;
+	string errordesc;
 	unsigned long errorcode;
 };
 class basicLCD

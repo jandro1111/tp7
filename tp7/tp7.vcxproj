@@ -140,14 +140,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="allegro.cpp" />
+    <ClCompile Include="claselcd1.cpp" />
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="mylcd.cpp" />
     <ClCompile Include="tp7.cpp" />
+    <ClCompile Include="tweet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allegro.h" />
     <ClInclude Include="basicLCD.h" />
+    <ClInclude Include="claselcd1.h" />
+    <ClInclude Include="header.h" />
+    <ClInclude Include="imconfig.h" />
+    <ClInclude Include="imgui.h" />
+    <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="imstb_rectpack.h" />
+    <ClInclude Include="imstb_textedit.h" />
+    <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="mylcd.h" />
+    <ClInclude Include="tweet.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="7SDD.TTF" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
