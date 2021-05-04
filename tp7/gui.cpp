@@ -49,6 +49,7 @@ int gui_init(void){
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ImGui::StyleColorsLight();
+	al_flip_display();
 
 	return 0;
 }
@@ -66,6 +67,7 @@ void gui_uninst()
 
 void gui_input(int& flag, int& canttwits, string& autor)
 {
+	gui_init();
 	bool keep_open = true;			// true hasta que se cierre la ventana a la que se asigna.
 
 	if (keep_open)

@@ -13,10 +13,10 @@ using namespace std;
 int main(void)
 {
 	init_allegro();
-	gui_init();
 	int canttwits = 3;
 	int boton = DONO;
 	string autor = "lanacion";
+	gui_input(boton, canttwits, autor);
 	basicLCD* lcd;
 	claselcd1 lcd1;
 	mylcd lcd2;
