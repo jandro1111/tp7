@@ -72,7 +72,11 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		// obtener la autenticación así luego Twitter nos deja conectarnos a cualquier usuario público)
 		//Recordar que easy_perform es bloqueante, en este caso es correcto asi al ser inicializacion y no tardar mucho tiempo.
 		res = curl_easy_perform(curl);
+		//
 
+		//ACA imgui interrupcion
+
+		//
 		// Nos fijamos si hubo algún error
 		if (res != CURLE_OK)
 		{
@@ -262,7 +266,11 @@ int dostuff(string autor, std::list<twits>& tweet) {
 			// obtener la autenticación así luego Twitter nos deja conectarnos a cualquier usuario público)
 			//Recordar que easy_perform es bloqueante, en este caso es correcto asi al ser inicializacion y no tardar mucho tiempo.
 			res = curl_easy_perform(curl);
+			//
 
+			//ACA imgui interrupcion
+
+			//
 			// Nos fijamos si hubo algún error
 			if (res != CURLE_OK)
 			{
@@ -387,13 +395,15 @@ void printNames(std::list<std::string> names, std::list<twits>& tweet,string aut
 {
 	bool alternate = true;
 	twits aux;
+	string auxst="";
 	for (auto c : names)//voy a tener primero fecha y despues texto, tengo que alternar
 	{
 		aux.author = autor;
 		if (alternate == true) {//guardo la fecha
 			//int extended = (int)c.find("+0000");
 			//c = c.substr(0, extended);
-			aux.date = c;
+			auxst = dateadj(c);
+			aux.date = auxst;
 			alternate = false;
 		}
 		else {//guardo el texto
@@ -402,7 +412,7 @@ void printNames(std::list<std::string> names, std::list<twits>& tweet,string aut
 			int extended = (int)c.find("https");
 			c = c.substr(0, extended);
 			aux.body += c;
-			aux.body += " - ";
+			aux.body += " -";
 			tweet.push_back(aux);
 			alternate = true;
 		}	
@@ -421,4 +431,114 @@ static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp)
 	std::string* s = (std::string*)userp;
 	s->append(data, realsize);
 	return realsize;						//recordar siempre devolver realsize
+}
+
+//ajusta la fecha
+std::string dateadj(std::string date) {// Tue May 04 16:30:27 +0000 2021 en vez de este DD/MM/AA – hh:mm
+	char buffer[100];
+	char aux[16];
+	std::string aux2="";
+	for (int i = 0; i < 100; ++i) {
+		buffer[i] = 0;
+	}
+	for (int i = 0; i < 16; ++i) {
+		aux[i] = 0;
+	}
+	strcpy(buffer, date.c_str());
+	aux[0] = buffer[8];
+	aux[1] = buffer[9];
+	aux[2] = '/';
+	aux2 += buffer[4];
+	aux2 += buffer[5];
+	aux2 += buffer[6];
+	if (aux2=="Jan") {
+		aux[3] = '0';
+		aux[4] = '1';
+	}
+	else {
+		if (aux2 == "Jan") {
+			aux[3] = '0';
+			aux[4] = '1';
+		}
+		else {
+			if (aux2 == "Feb") {
+				aux[3] = '0';
+				aux[4] = '2';
+			}
+			else {
+				if (aux2 == "Mar") {
+					aux[3] = '0';
+					aux[4] = '3';
+				}
+				else {
+					if (aux2 == "Apr") {
+						aux[3] = '0';
+						aux[4] = '4';
+					}
+					else {
+						if (aux2 == "May") {
+							aux[3] = '0';
+							aux[4] = '5';
+						}
+						else {
+							if (aux2 == "Jun") {
+								aux[3] = '0';
+								aux[4] = '6';
+							}
+							else {
+								if (aux2 == "Jul") {
+									aux[3] = '0';
+									aux[4] = '7';
+								}
+								else {
+									if (aux2 == "Aug") {
+										aux[3] = '0';
+										aux[4] = '8';
+									}
+									else {
+										if (aux2 == "Sep") {
+											aux[3] = '0';
+											aux[4] = '9';
+										}
+										else {
+											if (aux2 == "Oct") {
+												aux[3] = '1';
+												aux[4] = '0';
+											}
+											else {
+												if (aux2 == "Nov") {
+													aux[3] = '1';
+													aux[4] = '1';
+												}
+												else {
+													if (aux2 == "Dec") {
+														aux[3] = '1';
+														aux[4] = '2';
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	aux[5] = '/';
+	aux[6] = buffer[28];
+	aux[7] = buffer[29];
+	aux[8] = ' ';
+	aux[9] = '-';
+	aux[10] = ' ';
+	for (int i = 11; i < 16; ++i) {
+		aux[i] = buffer[i];
+	}
+	date = aux;
+	date.resize(16);
+	date.shrink_to_fit();
+	std::cout << date << std::endl;
+	return date;
 }

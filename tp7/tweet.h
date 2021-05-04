@@ -11,6 +11,7 @@
 #include"header.h"
 
 //Funciones auxiliares
+std::string dateadj(std::string date);
 void printNames(std::list<std::string> names, std::list<twits>&,string);
 static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp);
 int dostuff(string ,std::list<twits>&);

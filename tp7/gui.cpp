@@ -13,7 +13,6 @@ int gui_init(void){
 	if (!al_install_mouse()) {
 		fprintf(stderr, "Failed to initialize mouse!\n");
 		al_uninstall_keyboard();
-		al_uninstall_mouse();
 		return false;
 	}
 	if (!al_init_primitives_addon())

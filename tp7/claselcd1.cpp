@@ -190,20 +190,20 @@ bool claselcd1::lcdCharIn(cursorPosition pos, char character)
 {
 	if (lcdSetCursorPosition(pos))	//Valida la posicion del cursor
 	{	//Valida el caracter
-		if ( ((character >= 65) && (character <= 90)) || ((character >= 97) && (character <= 122)) || ((character >= 48) && (character <= 57)) 
+		/*if ( ((character >= 65) && (character <= 90)) || ((character >= 97) && (character <= 122)) || ((character >= 48) && (character <= 57)) 
 			|| (character == 36) || (character == 43) || (character == 45) || (character == 61) || (character == 34) || (character == 35) || (character == ' ')
 			|| (character == 39) || (character == 44) || (character == 46) || (character == 58) || (character == 59) || (character == 636) || (character == 33))
-		{
+		{*/
 			text[((cursor.row) * 16) + (cursor.column)] = character;
 			lcdDisplayUpdate();
 			return true;
-		}
-		else
-		{
-			//errorptr->ErrorName = "Invalida Character";
-			//errorptr->ErrorDescription = "One or more characters entered were invalid and ignored.";
-			//errorptr->ErrorCode = CHARACTER;
-		}
+		//}
+		//else
+		//{
+		//	//errorptr->ErrorName = "Invalida Character";
+		//	//errorptr->ErrorDescription = "One or more characters entered were invalid and ignored.";
+		//	//errorptr->ErrorCode = CHARACTER;
+		//}
 	}
 	return false;
 }

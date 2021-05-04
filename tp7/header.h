@@ -2,8 +2,17 @@
 #define HEADER_H
 
 #include <iostream>
+#include <exception>
+#include <list>
+#include <curl/curl.h>
 #include <string>
-#include<time.h>
+#include <time.h>
+#include "json.hpp"
+#include "mylcd.h"
+#include "claselcd1.h"
+#include "displaytrini.h"
+#include "gui.h"
+
 #define MAXTWITS 200
 using namespace std;
 

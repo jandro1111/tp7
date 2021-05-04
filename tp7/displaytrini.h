@@ -54,7 +54,7 @@ public:
 
 	bool lcdClearToEOL();
 
-	basicLCD& operator<< (const char c);
+	basicLCD& operator<< (unsigned const char c);
 
 	basicLCD& operator<< (const char* c);
 

@@ -1,14 +1,5 @@
-#include <iostream>
-#include <exception>
-#include <list>
-#include <curl/curl.h>
-#include "json.hpp"
-#include "mylcd.h"
-#include "tweet.h"
-#include "claselcd1.h"
 #include "header.h"
-#include "gui.h"
-
+#include "tweet.h"
 //Vamos a usar la librería NLOHMANN JSON 
 
 /*
@@ -23,22 +14,20 @@ int main(void)
 {
 	init_allegro();
 	gui_init();
-	// a reemplazar con imgui
 	int canttwits = 3;
 	int boton = DONO;
 	string autor = "lanacion";
-	//
 	basicLCD* lcd;
 	claselcd1 lcd1;
 	mylcd lcd2;
-	//displaytrini lcd3;	CREAR DISPLAY TRINI!!!!!!!
+	displayTrini lcd3;
 	lcd = &lcd1;
 	cursorPosition cursor;
 	list<twits>tweet;
 	list <twits> :: iterator twit;
 	int h = dostuff(autor,canttwits,tweet);
 	twit = tweet.begin();
-	char* body = &((twit->body)[0]);
+	char* body = &((twit->author)[0]);
 	int pos = 0;
 
 	while (boton != CANCEL /*&& descarga_no_terminada*/)
@@ -48,15 +37,7 @@ int main(void)
 		for (int i = 0; i < 16; i++)
 		{
 			*lcd << ((body)[0]);
-			lcd->lcdMoveCursorRight();
-		}
-		if ((string(body)).length() > 16)	//No toma el terminador
-		{
 			body++;
-		}
-		else
-		{
-			body = &((twit->body)[0]);
 		}
 		cursor = { 1,0 };
 		lcd->lcdSetCursorPosition(cursor);
@@ -70,7 +51,6 @@ int main(void)
 			{
 				*lcd << ' ';
 			}
-			lcd->lcdMoveCursorRight();
 			pos++;
 		}
 		if (pos == 18)
@@ -89,14 +69,13 @@ int main(void)
 		{
 			cursor = { 0,0 };
 			lcd->lcdSetCursorPosition(cursor);
-			*lcd << (twit->date).c_str();
+			*lcd << ((twit->date).c_str());
 
 			cursor = { 1,0 };
 			lcd->lcdSetCursorPosition(cursor);
 			for (int i = 0; i < 16; i++)
 			{
-				*lcd << ((body)[0]);
-				lcd->lcdMoveCursorRight();
+				*lcd << ((body)[i]);
 			}
 			if ((string(body)).length() > 16)	//No toma el terminador
 			{
@@ -126,11 +105,11 @@ int main(void)
 			boton = DONO;
 			break;
 		case LCD2:
-			lcd = &lcd1;	//CAMBIAR!!!!!!!!!!!!!!!!!
+			lcd = &lcd2;
 			boton = DONO;
 			break;
 		case LCD3:
-			lcd = &lcd1;
+			lcd = &lcd3;
 			boton = DONO;
 			break;
 		default:

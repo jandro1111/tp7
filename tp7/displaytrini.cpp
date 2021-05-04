@@ -136,7 +136,7 @@ cursorPosition displayTrini::lcdGetCursorPosition() {
 
 
 
-basicLCD& displayTrini::operator<< (const char c) {
+basicLCD& displayTrini::operator<<(unsigned const char c) {
 	str[cursor.row][cursor.column] = c;
 	if (cursor.column < (COLMAX - 1)) {
 		cursor.column += 1;
