@@ -67,7 +67,7 @@ int main(void)
 			lcd->lcdMoveCursorRight();
 			pos++;
 		}
-		if (pos == 15)
+		if (pos == 18)
 		{
 			pos = 0;
 		}
