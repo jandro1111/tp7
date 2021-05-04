@@ -10,10 +10,10 @@
 #include<string>
 #include"header.h"
 //Funciones auxiliares
-void printNames(std::list<std::string> names, std::list<twits>&);
+void printNames(std::list<std::string> names, std::list<twits>&,string);
 static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp);
-int dostuff(std::list<twits>&);
-int dostuff(int, std::list<twits>&);
+int dostuff(string ,std::list<twits>&);
+int dostuff(string, int, std::list<twits>&);
 
 
 #endif

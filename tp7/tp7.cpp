@@ -19,8 +19,10 @@
 int main(void)
 {
 	init_allegro();
+	// a reemplazar con imgui
 	int canttwits = 3;
-
+	string autor = "lanacion";
+	//
 	basicLCD* lcd;
 	claselcd1 lcd1;
 	mylcd lcd2;
@@ -28,7 +30,7 @@ int main(void)
 	lcd = &lcd1;
 	cursorPosition cursor;
 	std::list<twits>tweet;
-	return dostuff(canttwits,tweet);
+	return dostuff(autor,canttwits,tweet);
 	twits* twit=&tweet;	//CARGAR ARREGLO!!!!!!!
 	char* body;
 	int pos = 0;

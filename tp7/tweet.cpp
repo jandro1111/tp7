@@ -1,7 +1,7 @@
 #include "tweet.h"
 using json = nlohmann::json;
 
-int dostuff(std::list<twits>& tweet) {
+int dostuff(string autor,std::list<twits>& tweet) {
 	json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 	// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -14,9 +14,8 @@ int dostuff(std::list<twits>& tweet) {
 	std::string readString, token;
 
 	// Query es la dirección de Twitter que vamos a consultar. vamos a bajar los &count twits de screen_name en formato JSON.
-	std::string query = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=lanacion";//este numero es la cantidad de twetts  &count=0
-	//conectar con imgui
-	//query += "&count=1";
+	std::string query = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";//este numero es la cantidad de twetts  &count=0
+	query += autor;
 	// Las dos constantes de abajo son el API_Key y API_SecretKey que necesita Twitter para realizar la autenticación de nuestra App
 	// y por lo tanto permitirnos el acceso a sus servidores. Son parte de la estrategia de autenticación Oauth2.
 	//Ambas se obtienen de la app que creen en la pagina de Twitter
@@ -176,7 +175,7 @@ int dostuff(std::list<twits>& tweet) {
 			for (auto element : j)
 				names.push_back(element["text"]);
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
-			printNames(names,tweet);
+			printNames(names,tweet,autor);
 		}
 		catch (std::exception& e)
 		{
@@ -188,7 +187,7 @@ int dostuff(std::list<twits>& tweet) {
 		std::cout << "Cannot download tweets. Unable to start cURL" << std::endl;
 	return 0;
 }
-	int dostuff(int cant, std::list<twits>& tweet) {
+	int dostuff(string autor,int cant, std::list<twits>& tweet) {
 		json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 		// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -201,8 +200,9 @@ int dostuff(std::list<twits>& tweet) {
 		std::string readString, token;
 
 		// Query es la dirección de Twitter que vamos a consultar. vamos a bajar los &count twits de screen_name en formato JSON.
-		std::string query = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=lanacion";//este numero es la cantidad de twetts  &count=0
+		std::string query = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";//este numero es la cantidad de twetts  &count=0
 		//conectar con imgui
+		query += autor;
 		query += "&count=";
 		query += std::to_string(cant);
 		// Las dos constantes de abajo son el API_Key y API_SecretKey que necesita Twitter para realizar la autenticación de nuestra App
@@ -366,7 +366,7 @@ int dostuff(std::list<twits>& tweet) {
 			for (auto element : j)
 				names.push_back(element["text"]);
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
-			printNames(names,tweet);
+			printNames(names,tweet,autor);
 		}
 		catch (std::exception& e)
 		{
@@ -380,13 +380,14 @@ int dostuff(std::list<twits>& tweet) {
 }
 
 //Funcion auxiliar para imprimir los tweets en pantalla una vez parseados
-void printNames(std::list<std::string> names, std::list<twits>& tweet)//      modificar esto para lcd
+void printNames(std::list<std::string> names, std::list<twits>& tweet,string autor)//      modificar esto para lcd
 {
+	time_t now = time(0);
 	for (auto c : names)
 	{
 		twits aux;
-		aux.author = "autor";
-		aux.date = "fecha";
+		aux.author = autor;
+		aux.date = ctime(&now);
 		//Eliminamos el URL al final para mostrar
 		int extended = (int)c.find("https");
 		c = c.substr(0, extended);
