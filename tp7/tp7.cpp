@@ -30,36 +30,35 @@ int main(void)
 	char* body = &((twit->author)[0]);
 	int pos = 0;
 
-	while (boton != CANCEL /*&& descarga_no_terminada*/)
-	{
-		cursor = { 0,0 };
-		lcd->lcdSetCursorPosition(cursor);
-		for (int i = 0; i < 16; i++)
-		{
-			*lcd << ((body)[0]);
-			body++;
-		}
-		cursor = { 1,0 };
-		lcd->lcdSetCursorPosition(cursor);
-		for (int i = 0; i < 16; i++)
-		{
-			if (i >= 0 && i > (pos - 4) && i <= (pos))
-			{
-				*lcd << '=';
-			}
-			else
-			{
-				*lcd << ' ';
-			}
-			pos++;
-		}
-		if (pos == 18)
-		{
-			pos = 0;
-		}
-		//Se apreto un boton?
-		al_rest(0.1);
-	}
+	//while (boton != CANCEL /*&& descarga_no_terminada*/)
+	//{
+	//	cursor = { 0,0 };
+	//	lcd->lcdSetCursorPosition(cursor);
+	//	for (int i = 0; i < 16; i++)
+	//	{
+	//		*lcd << ((body)[i]);
+	//	}
+	//	cursor = { 1,0 };
+	//	lcd->lcdSetCursorPosition(cursor);
+	//	for (int i = 0; i < 16; i++)
+	//	{
+	//		if (i >= 0 && i > (pos - 4) && i <= (pos))
+	//		{
+	//			*lcd << '=';
+	//		}
+	//		else
+	//		{
+	//			*lcd << ' ';
+	//		}
+	//	}
+	//	if (pos == 19)
+	//	{
+	//		pos = -1;
+	//	}
+	//	pos++;
+	//	//Se apreto un boton?
+	//	al_rest(0.1);
+	//}
 
 	body = &((twit->body)[0]);
 
