@@ -385,8 +385,8 @@ void printNames(std::list<std::string> names, std::list<twits>& tweet)//      mo
 	for (auto c : names)
 	{
 		twits aux;
-		aux.author = "";
-		aux.date = "";
+		aux.author = "autor";
+		aux.date = "fecha";
 		//Eliminamos el URL al final para mostrar
 		int extended = (int)c.find("https");
 		c = c.substr(0, extended);
