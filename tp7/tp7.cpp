@@ -19,7 +19,7 @@
 int main(void)
 {
 	init_allegro();
-	int canttwits = 20;
+	int canttwits = 3;
 
 	basicLCD* lcd;
 	claselcd1 lcd1;
@@ -27,7 +27,9 @@ int main(void)
 	//..... lcd3;	CREAR DISPLAY TRINI!!!!!!!
 	lcd = &lcd1;
 	cursorPosition cursor;
-	twits* twit;	//CARGAR ARREGLO!!!!!!!
+	std::list<twits>tweet;
+	return dostuff(canttwits,tweet);
+	twits* twit=&tweet;	//CARGAR ARREGLO!!!!!!!
 	char* body;
 	int pos = 0;
 
@@ -132,5 +134,5 @@ int main(void)
 		}
 	}
 
-	return dostuff(canttwits);
+	
 }

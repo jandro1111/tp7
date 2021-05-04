@@ -8,11 +8,12 @@
 #include "json.hpp"
 #include "mylcd.h"
 #include<string>
+#include"header.h"
 //Funciones auxiliares
-void printNames(std::list<std::string> names);
+void printNames(std::list<std::string> names, std::list<twits>&);
 static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp);
-int dostuff(void);
-int dostuff(int);
+int dostuff(std::list<twits>&);
+int dostuff(int, std::list<twits>&);
 
 
 #endif

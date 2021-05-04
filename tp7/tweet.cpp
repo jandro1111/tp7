@@ -1,7 +1,7 @@
 #include "tweet.h"
 using json = nlohmann::json;
 
-int dostuff(void) {
+int dostuff(std::list<twits>& tweet) {
 	json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 	// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -176,7 +176,7 @@ int dostuff(void) {
 			for (auto element : j)
 				names.push_back(element["text"]);
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
-			printNames(names);
+			printNames(names,tweet);
 		}
 		catch (std::exception& e)
 		{
@@ -188,7 +188,7 @@ int dostuff(void) {
 		std::cout << "Cannot download tweets. Unable to start cURL" << std::endl;
 	return 0;
 }
-	int dostuff(int cant) {
+	int dostuff(int cant, std::list<twits>& tweet) {
 		json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 		// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -366,7 +366,7 @@ int dostuff(void) {
 			for (auto element : j)
 				names.push_back(element["text"]);
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
-			printNames(names);
+			printNames(names,tweet);
 		}
 		catch (std::exception& e)
 		{
@@ -380,17 +380,19 @@ int dostuff(void) {
 }
 
 //Funcion auxiliar para imprimir los tweets en pantalla una vez parseados
-void printNames(std::list<std::string> names)//      modificar esto para lcd
+void printNames(std::list<std::string> names, std::list<twits>& tweet)//      modificar esto para lcd
 {
 	for (auto c : names)
 	{
+		twits aux;
+		aux.author = "";
+		aux.date = "";
 		//Eliminamos el URL al final para mostrar
 		int extended = (int)c.find("https");
 		c = c.substr(0, extended);
+		aux.body = c;
 		c.append("...");
-		/*mylcd j;
-		j << (c.c_str());*/
-		//lcd
+		tweet.push_back(aux);
 		std::cout << c << std::endl;
 		std::cout << "-----------------------------------------" << std::endl;
 	}
