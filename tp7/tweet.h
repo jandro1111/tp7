@@ -9,6 +9,7 @@
 #include "mylcd.h"
 #include<string>
 #include"header.h"
+
 //Funciones auxiliares
 void printNames(std::list<std::string> names, std::list<twits>&,string);
 static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp);
