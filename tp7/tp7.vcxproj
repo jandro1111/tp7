@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="allegro.cpp" />
     <ClCompile Include="claselcd1.cpp" />
+    <ClCompile Include="displaytrini.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="allegro.h" />
     <ClInclude Include="basicLCD.h" />
     <ClInclude Include="claselcd1.h" />
+    <ClInclude Include="displaytrini.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="imconfig.h" />

@@ -45,6 +45,9 @@
     <ClCompile Include="gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="displaytrini.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_allegro5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="displaytrini.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

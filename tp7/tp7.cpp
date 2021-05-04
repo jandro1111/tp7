@@ -16,6 +16,8 @@
 *
 */
 
+using namespace std;
+
 int main(void)
 {
 	init_allegro();
@@ -26,18 +28,17 @@ int main(void)
 	basicLCD* lcd;
 	claselcd1 lcd1;
 	mylcd lcd2;
-	//..... lcd3;	CREAR DISPLAY TRINI!!!!!!!
+	//displaytrini lcd3;	CREAR DISPLAY TRINI!!!!!!!
 	lcd = &lcd1;
 	cursorPosition cursor;
-	std::list<twits>tweet;
-	return dostuff(autor,canttwits,tweet);
-	twits* twit=&tweet;	//CARGAR ARREGLO!!!!!!!
-	char* body;
+	list<twits>tweet;
+	list <twits> :: iterator twit;
+	twit = tweet.begin();
+	dostuff(autor,canttwits,tweet);
+	char* body = &(twit->author)[0];
 	int pos = 0;
 
 	int boton = DONO; //CAMBIAR POR VAR DE IMGUI!!!!!!!!!!!!!!!!!!!!!!
-	
-	body = &(twit->author)[0];
 
 	while (boton != CANCEL /*&& descarga_no_terminada*/)
 	{

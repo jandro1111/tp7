@@ -12,7 +12,7 @@ int dostuff(string autor,std::list<twits>& tweet) {
 	CURLM* multiHandle;			//Variable donde vamos a atachear los easy handles
 	CURLcode res;
 	std::string readString, token;
-
+	std::list<std::string> date;
 	// Query es la dirección de Twitter que vamos a consultar. vamos a bajar los &count twits de screen_name en formato JSON.
 	std::string query = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";//este numero es la cantidad de twetts  &count=0
 	query += autor;
@@ -172,8 +172,10 @@ int dostuff(string autor,std::list<twits>& tweet) {
 		try
 		{
 			//Al ser el JSON un arreglo de objetos JSON se busca el campo text para cada elemento
-			for (auto element : j)
+			for (auto element : j) {
+				names.push_back(element["created_at"]);
 				names.push_back(element["text"]);
+			}
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
 			printNames(names,tweet,autor);
 		}
@@ -198,7 +200,6 @@ int dostuff(string autor,std::list<twits>& tweet) {
 		CURLM* multiHandle;			//Variable donde vamos a atachear los easy handles
 		CURLcode res;
 		std::string readString, token;
-
 		// Query es la dirección de Twitter que vamos a consultar. vamos a bajar los &count twits de screen_name en formato JSON.
 		std::string query = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";//este numero es la cantidad de twetts  &count=0
 		//conectar con imgui
@@ -363,8 +364,10 @@ int dostuff(string autor,std::list<twits>& tweet) {
 		try
 		{
 			//Al ser el JSON un arreglo de objetos JSON se busca el campo text para cada elemento
-			for (auto element : j)
+			for (auto element : j) {
+				names.push_back(element["created_at"]);
 				names.push_back(element["text"]);
+			}
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
 			printNames(names,tweet,autor);
 		}
@@ -382,18 +385,25 @@ int dostuff(string autor,std::list<twits>& tweet) {
 //Funcion auxiliar para imprimir los tweets en pantalla una vez parseados
 void printNames(std::list<std::string> names, std::list<twits>& tweet,string autor)//      modificar esto para lcd
 {
-	time_t now = time(0);
-	for (auto c : names)
+	bool alternate = true;
+	twits aux;
+	for (auto c : names)//voy a tener primero fecha y despues texto, tengo que alternar
 	{
-		twits aux;
 		aux.author = autor;
-		aux.date = ctime(&now);
+		if (alternate == true) {//guardo la fecha
+			int extended = (int)c.find("+0000");
+			c = c.substr(0, extended);
+			aux.date = c;
+			alternate = false;
+		}
+		else {//guardo el texto
+			int extended = (int)c.find("https");
+			c = c.substr(0, extended);
+			aux.body = c;
+			tweet.push_back(aux);
+			alternate = true;
+		}	
 		//Eliminamos el URL al final para mostrar
-		int extended = (int)c.find("https");
-		c = c.substr(0, extended);
-		aux.body = c;
-		c.append("...");
-		tweet.push_back(aux);
 		std::cout << c << std::endl;
 		std::cout << "-----------------------------------------" << std::endl;
 	}
