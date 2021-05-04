@@ -5,11 +5,7 @@ using namespace std;
 ALLEGRO_DISPLAY* display;
 ALLEGRO_EVENT_QUEUE* eventQueue;
 
-int gui_init(int flag){
-	if (!al_init()) {
-		fprintf(stderr, "Failed to initialize allegro!\n");
-		return false;
-	}
+int gui_init(void){
 	if (!al_install_keyboard()) {
 		fprintf(stderr, "Failed to initialize keyboard!\n");
 		return false;
@@ -49,25 +45,11 @@ int gui_init(int flag){
     al_register_event_source(eventQueue, al_get_mouse_event_source());
 
 	IMGUI_CHECKVERSION();			// Control de version de Dear ImGui
-	ImGui::CreateContext(); 
+	ImGui::CreateContext();
 	ImGui_ImplAllegro5_Init(display); // Inicializa Dear ImGui
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ImGui::StyleColorsLight();
-	bool running = true;			// true hasta que se cierre el display.
-	bool keep_open = true;			// true hasta que se cierre la ventana a la que se asigna.
-
-	ImGui::Begin("INIT");
-		if (ImGui::Button("GO")){
-			flag = GO;
-		}
-		for (int i = 0; i < 16; i ++){
-			username[i] = '\0';
-		}
-		ImGui::InputText("usuario", username, IM_ARRAYSIZE(username));
-		static int i0 = 20;
-        ImGui::InputInt("cantidad de tweets", &i0);
-		ImGui::End();
 
 	return 0;
 }
@@ -83,12 +65,89 @@ void gui_uninst()
 	al_uninstall_keyboard();
 }
 
-int gui_searching(int flag){
+void gui_input(int& flag, int& canttwits, string& autor)
+{
+	bool keep_open = true;			// true hasta que se cierre la ventana a la que se asigna.
 
-	return 0;
+	if (keep_open)
+	{
+		ImGui::Begin("INIT", &keep_open);
+		if (ImGui::Button("GO")) {
+			flag = GO;
+		}
+		autor.clear();
+		ImGui::InputText("usuario", (char*)autor.c_str(), 15);
+		static int i0 = 20;
+		ImGui::InputInt("cantidad de tweets", &i0);
+		ImGui::End();
+	}
+	else 
+	{
+		flag = CLOSE;
+	}
+	return;
 }
 
-int gui_showtw (int flag){
+void gui_searching(int& flag){
+	bool keep_open = true;			// true hasta que se cierre la ventana a la que se asigna.
 
-	return 0;
+	if (keep_open)
+	{
+		ImGui::Begin("SEARCHING", &keep_open);
+		if (ImGui::Button("Cancel")) {
+			flag = CANCEL;
+		}
+		if (ImGui::Button("Display1")) {
+			flag = LCD1;
+		}
+		if (ImGui::Button("Display2")) {
+			flag = LCD2;
+		}		
+		if (ImGui::Button("Display3")) {
+			flag = LCD3;
+		}
+		ImGui::End();
+	}
+	else 
+	{
+		flag = CLOSE;
+	}
+	return;
+}
+
+void gui_showtw (int& flag, float& vel){
+	bool keep_open = true;			// true hasta que se cierre la ventana a la que se asigna.
+
+	if (keep_open)
+	{
+		ImGui::Begin("SHOWING TWEETS", &keep_open);
+		if (ImGui::Button("Previous")) {
+			flag = PREV;
+		}
+		if (ImGui::Button("Repeat")) {
+			flag = REP;
+		}
+		if (ImGui::Button("Next")) {
+			flag = NEXT;
+		}
+		if (ImGui::Button("Cancel")) {
+			flag = CANCEL;
+		}
+		ImGui::SliderFloat("Velocidad", &vel, 0.0f, 1.0f);
+		if (ImGui::Button("Display1")) {
+			flag = LCD1;
+		}
+		if (ImGui::Button("Display2")) {
+			flag = LCD2;
+		}		
+		if (ImGui::Button("Display3")) {
+			flag = LCD3;
+		}
+		ImGui::End();
+	}
+	else 
+	{
+		flag = CLOSE;
+	}
+	return;
 }

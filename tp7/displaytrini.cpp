@@ -1,5 +1,5 @@
 #include "displaytrini.h"
-#define CURSOR_POSITION		(this->cursor.row*(COLMAX) + this->cursor.column)
+#define CURSOR_POSITION		((size_t)this->cursor.row*(COLMAX) + (size_t)this->cursor.column)
 
 using namespace std;
 
@@ -15,7 +15,7 @@ displayTrini::displayTrini() {
 	initOk = allegroInit();
 	lcdClear();
 	if (!lcdInitOk()) {
-		error.setError ("Init error", "No se inicializo bien allegro", ALINIT);
+		//error.setError ("Init error", "No se inicializo bien allegro", ALINIT);
 		allegroDestroy();
 	}
 }
@@ -32,7 +32,7 @@ bool displayTrini::lcdInitOk() {
 }
 
 lcdError& displayTrini::lcdGetError() {
-	return estado;
+	return error;
 }
 
 bool displayTrini::lcdClear() {
@@ -68,7 +68,7 @@ bool displayTrini::lcdMoveCursorUp() {
 		return true;
 	}
 	else {
-		error.setError("MoveCursorUp error", "El cursor se encontraba la primera linea", UP_BOUNDARY);
+		//error.setError("MoveCursorUp error", "El cursor se encontraba la primera linea", UP_BOUNDARY);
 		return false;
 	}
 }
@@ -80,7 +80,7 @@ bool displayTrini::lcdMoveCursorDown() {
 		return true;
 	}
 	else {
-		error.setError("MoveCursorDown error", "El cursor se encontraba la ultima linea", DOWN_BOUNDARY);
+		//error.setError("MoveCursorDown error", "El cursor se encontraba la ultima linea", DOWN_BOUNDARY);
 		return false;
 	}
 }
@@ -97,9 +97,10 @@ bool displayTrini::lcdMoveCursorRight() {
 		return true;
 	}
 	else if ((cursor.row == (FILAMAX - 1)) && (cursor.column == (COLMAX - 1))) {
-		error.setError("MoveCursorRight error", "El cursor se encontraba al final del display", RIGHT_BOUNDARY);
+		//error.setError("MoveCursorRight error", "El cursor se encontraba al final del display", RIGHT_BOUNDARY);
 		return false;
 	}
+	return false;
 }
 
 bool displayTrini::lcdMoveCursorLeft() {
@@ -114,10 +115,10 @@ bool displayTrini::lcdMoveCursorLeft() {
 		return true;
 	}
 	else if ((cursor.row == FILAMIN) && (cursor.column == COLMIN)) {
-		error.setError("MoveCursorLeft error", "El cursor se encontraba al principio del display", LEFT_BOUNDARY);
+		//error.setError("MoveCursorLeft error", "El cursor se encontraba al principio del display", LEFT_BOUNDARY);
 		return false;
 	}
-		return false;
+	return false;
 }
 
 bool displayTrini::lcdSetCursorPosition(const cursorPosition c) {
@@ -172,14 +173,14 @@ basicLCD& displayTrini::operator<<(const char* c) {
 		if (CURSOR_POSITION + temp.size() < FILAMAX * COLMAX) {
 			lcdString.replace(CURSOR_POSITION, temp.size(), temp);
 		
-			totalNewPosition = temp.size() + CURSOR_POSITION;
+			totalNewPosition = (int)temp.size() + CURSOR_POSITION;
 		}
 		else {
 			size_t charsCopied = FILAMAX * COLMAX - CURSOR_POSITION;
 			lcdString.replace(CURSOR_POSITION, charsCopied, temp, 0, charsCopied);
 			lcdString.replace(0, temp.size() - charsCopied, temp, charsCopied, temp.size() - charsCopied);
 
-			totalNewPosition = temp.size() - charsCopied;
+			totalNewPosition = (int)(temp.size() - charsCopied);
 		}
 		if (totalNewPosition % (FILAMAX*COLMAX) == 0) {
 			cur.row = 0;
@@ -193,7 +194,7 @@ basicLCD& displayTrini::operator<<(const char* c) {
 		lcdSetCursorPosition(cur);
 	}
 	else {
-		error.setError("Writing exceeded error", "El maximo largo es de 32 caracteres", WRITING_EXCEEDED);
+		//error.setError("Writing exceeded error", "El maximo largo es de 32 caracteres", WRITING_EXCEEDED);
 		lcdString.assign(temp, temp.length() - FILAMAX * COLMAX, FILAMAX * COLMAX);
 		cursorPosition cur = {0, 0};
 	}
@@ -255,13 +256,13 @@ bool displayTrini::allegroInit() {
 	}
 	if (!(all.display = al_create_display(WIDTH, HEIGHT))) {
 		cout << "failed to create display!" << endl;
-		error.setError("Display error", "No se pudo inicializar el display", DISPLAY);
+		//error.setError("Display error", "No se pudo inicializar el display", DISPLAY);
 		return false;
 	}
 	if (!(all.font = al_load_ttf_font(FONT_TRINI, 100, 0))) {
 		cout << "failed to load font!" << endl;
 		al_destroy_display(all.display);
-		error.setError("Font error", "No se pudo inicializar la fuente", FONT);
+		//error.setError("Font error", "No se pudo inicializar la fuente", FONT);
 		return false;
 	}
 	all.eventQueue = al_create_event_queue();

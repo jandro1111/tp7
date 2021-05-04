@@ -1,7 +1,7 @@
 #include "tweet.h"
 using json = nlohmann::json;
 
-int dostuff(string autor,std::list<twits>& tweet) {
+int dostuff(string autor, std::list<twits>& tweet) {
 	json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 	// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -391,15 +391,18 @@ void printNames(std::list<std::string> names, std::list<twits>& tweet,string aut
 	{
 		aux.author = autor;
 		if (alternate == true) {//guardo la fecha
-			int extended = (int)c.find("+0000");
-			c = c.substr(0, extended);
+			//int extended = (int)c.find("+0000");
+			//c = c.substr(0, extended);
 			aux.date = c;
 			alternate = false;
 		}
 		else {//guardo el texto
+			aux.body += autor;
+			aux.body += ": - ";
 			int extended = (int)c.find("https");
 			c = c.substr(0, extended);
-			aux.body = c;
+			aux.body += c;
+			aux.body += " - ";
 			tweet.push_back(aux);
 			alternate = true;
 		}	

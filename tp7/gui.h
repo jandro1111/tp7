@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GUI_H
 #define GUI_H
 
@@ -17,10 +16,14 @@
 #include "imstb_truetype.h"
 #include "header.h"
 
-int gui_init(int flag);
+int gui_init(void);
 
-int gui_searching(int flag);
+void gui_uninst(void);
 
-int gui_showtw (int flag);
+void gui_input(int& flag, int& canttwits, string& autor);
+
+void gui_searching(int& flag);
+
+void gui_showtw(int& flag, float& vel);
 
 #endif

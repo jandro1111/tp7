@@ -7,6 +7,7 @@
 #include "tweet.h"
 #include "claselcd1.h"
 #include "header.h"
+#include "gui.h"
 
 //Vamos a usar la librería NLOHMANN JSON 
 
@@ -21,8 +22,10 @@ using namespace std;
 int main(void)
 {
 	init_allegro();
+	gui_init();
 	// a reemplazar con imgui
 	int canttwits = 3;
+	int boton = DONO;
 	string autor = "lanacion";
 	//
 	basicLCD* lcd;
@@ -33,12 +36,10 @@ int main(void)
 	cursorPosition cursor;
 	list<twits>tweet;
 	list <twits> :: iterator twit;
+	int h = dostuff(autor,canttwits,tweet);
 	twit = tweet.begin();
-	dostuff(autor,canttwits,tweet);
-	char* body = &(twit->author)[0];
+	char* body = &((twit->body)[0]);
 	int pos = 0;
-
-	int boton = DONO; //CAMBIAR POR VAR DE IMGUI!!!!!!!!!!!!!!!!!!!!!!
 
 	while (boton != CANCEL /*&& descarga_no_terminada*/)
 	{
@@ -55,13 +56,13 @@ int main(void)
 		}
 		else
 		{
-			body = &(twit->author)[0];
+			body = &((twit->body)[0]);
 		}
 		cursor = { 1,0 };
 		lcd->lcdSetCursorPosition(cursor);
 		for (int i = 0; i < 16; i++)
 		{
-			if (i >= 0 && i > (pos-4) && i <= (pos))
+			if (i >= 0 && i > (pos - 4) && i <= (pos))
 			{
 				*lcd << '=';
 			}
@@ -80,7 +81,7 @@ int main(void)
 		al_rest(0.1);
 	}
 
-	body = &(twit->body)[0];
+	body = &((twit->body)[0]);
 
 	while (boton != EXIT)
 	{
@@ -136,6 +137,6 @@ int main(void)
 			break;
 		}
 	}
-
-	
+	gui_uninst();
+	return 0;
 }

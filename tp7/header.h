@@ -7,9 +7,7 @@
 #define MAXTWITS 200
 using namespace std;
 
-enum { DONO = 0, GO = 1, REP, NEXT, PREV, EXIT, LCD1, LCD2, LCD3, CANCEL };
-
-char username[16];
+enum { DONO = 0, GO = 1, REP, NEXT, PREV, EXIT, LCD1, LCD2, LCD3, CANCEL, CLOSE };
 
 struct twits
 {
