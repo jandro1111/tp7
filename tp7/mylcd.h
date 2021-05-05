@@ -35,8 +35,4 @@ private:
 	ALLEGRO_FONT* fuente;
 };
 
-
-
-
-
 #endif

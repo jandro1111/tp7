@@ -39,7 +39,7 @@ public:
     bool lcdDisplayUpdate();
 
 private:
-    ALLEGRO_DISPLAY* display;
+    ALLEGRO_DISPLAY* displaylcd1;
     ALLEGRO_FONT* fuente;
     cursorPosition cursor;
     lcdError estado;

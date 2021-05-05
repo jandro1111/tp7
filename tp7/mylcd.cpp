@@ -23,7 +23,8 @@ mylcd::mylcd() {
 	fuente = al_load_ttf_font("7SDD.ttf", 36, 0);
 }
 mylcd::~mylcd() {
-
+	al_destroy_display(displaylcd);	//Destruye el display y la font
+	al_destroy_font(fuente);
 }
 bool mylcd::lcdInitOk() {
 	return 1;
@@ -179,13 +180,13 @@ cursorPosition mylcd::lcdGetCursorPosition() {
 void mylcd::printdisp() {
 	al_set_target_backbuffer(displaylcd);
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-	string aux=""; 
+	string aux = "";
 	string aux1 = "";
 	for (int i = 0; i < FILMAX; ++i) {
 		for (int j = 0; (j < COLMAX); ++j) {
-			cout << disp[i][j];
+			//cout << disp[i][j];
 			if (i == 0) {
-				if (disp[i][j] >= 32 && disp[i][j] <= 254) {
+				if (disp[i][j] <= 32 && disp[i][j] >= 254) {
 					aux += '\0';
 				}
 				else {
@@ -193,17 +194,17 @@ void mylcd::printdisp() {
 				}
 			}
 			else {
-				if (disp[i][j] >= 32 && disp[i][j] <= 254) {
-					aux += '\0';
+				if (disp[i][j] <= 32 && disp[i][j] >= 254) {
+					aux1 += '\0';
 				}
 				else {
-					aux += disp[i][j];
+					aux1 += disp[i][j];
 				}
 			}
 		}
-		cout << endl;
+		//cout << endl;
 	}
-	cout << endl;//algo
+	//cout << endl;//algo
 	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
 	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
 	al_flip_display();

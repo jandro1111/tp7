@@ -23,7 +23,7 @@ int gui_init(void){
 		return false;
 	}
 	
-	if ((displaygui = al_create_display(1000, 300)) == NULL) {
+	if ((displaygui = al_create_display(500, 300)) == NULL) {
 		al_uninstall_keyboard();
 		al_uninstall_mouse();
 		al_shutdown_primitives_addon();

@@ -2,23 +2,23 @@
 
 claselcd1::claselcd1()
 {
-	display = NULL; fuente = NULL;
+	displaylcd1 = NULL; fuente = NULL;
 	cursor = { 0, 0 };
 	fuente = al_load_font("colleges.ttf", SIZEFUENTE, 0);	// Carga la fuente
-	display = al_create_display(ANCHODISPLAY, ALTODISPLAY);	//Crea el display
-	al_set_window_title(display, "Display 1");
+	displaylcd1 = al_create_display(ANCHODISPLAY, ALTODISPLAY);	//Crea el display
+	al_set_window_title(displaylcd1, "Display 1");
 	lcdDisplayUpdate();
 }
 
 claselcd1::~claselcd1()
 {
-	al_destroy_display(display);	//Destruye el display y la font
+	al_destroy_display(displaylcd1);	//Destruye el display y la font
 	al_destroy_font(fuente);
 }
 
 bool claselcd1::lcdInitOk()
 {
-	if (display == NULL || fuente == NULL)	//Si no se inicializaron correctamente
+	if (displaylcd1 == NULL || fuente == NULL)	//Si no se inicializaron correctamente
 	{
 		cout << "Display or Font could not be initiated." << endl;
 		//errorptr->ErrorName = "Display Or Font Init";
@@ -210,7 +210,7 @@ bool claselcd1::lcdCharIn(cursorPosition pos, char character)
 
 bool claselcd1::lcdDisplayUpdate()	//Actualiza el display
 {
-	al_set_target_backbuffer(display);
+	al_set_target_backbuffer(displaylcd1);
 	al_clear_to_color(BACKCOLOR);
 	for (int i = 0; i <= 1; ++i)
 	{

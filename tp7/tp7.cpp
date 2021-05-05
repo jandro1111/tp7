@@ -43,18 +43,17 @@ int main(void)
 	{
 		error = dostuff(autor, canttwits, tweet);
 	}
+
 	twit = tweet.begin();
-	char* body = &((twit->author)[0]);
+	char* body;
 	int pos = 0;
 	float vel = 0;
+
 	while (boton != CANCEL /*&& descarga_no_terminada*/)
 	{
 		cursor = { 0,0 };
 		lcd->lcdSetCursorPosition(cursor);
-		for (int i = 0; i < 16; i++)
-		{
-			*lcd << ((body)[i]);
-		}
+		*lcd << (&(twit->author)[0]);
 		cursor = { 1,0 };
 		lcd->lcdSetCursorPosition(cursor);
 		for (int i = 0; i < 16; i++)
@@ -100,7 +99,7 @@ int main(void)
 
 			cursor = { 1,0 };
 			lcd->lcdSetCursorPosition(cursor);
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; (i < 16) && (((body)[i]) != '\0'); i++)
 			{
 				*lcd << ((body)[i]);
 			}
@@ -153,3 +152,7 @@ int main(void)
 	gui_uninst();
 	return 0;
 }
+
+//Destructor mylcd.cpp
+//flujo del main
+//velocidad scroll bloqueante
