@@ -203,7 +203,7 @@ void mylcd::printdisp() {
 		}
 		cout << endl;
 	}
-	cout << endl;
+	cout << endl;//algo
 	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
 	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
 	al_flip_display();
