@@ -172,8 +172,8 @@ void gui_showtw (int& flag, float& vel){
 	if (ImGui::Button("Next")) {
 		flag = NEXT;
 	}
-	if (ImGui::Button("Cancel")) {
-		flag = CANCEL;
+	if (ImGui::Button("Exit")) {
+		flag = EXIT;
 	}
 	ImGui::SliderFloat("Velocidad", &vel, 0.0f, 1.0f);
 	if (ImGui::Button("Display1")) {

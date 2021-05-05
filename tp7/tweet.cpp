@@ -407,7 +407,7 @@ void printNames(std::list<std::string> names, std::list<twits>& tweet,string aut
 			alternate = false;
 		}
 		else {//guardo el texto
-			aux.body += autor;
+			aux.body = autor;
 			aux.body += ": - ";
 			int extended = (int)c.find("https");
 			c = c.substr(0, extended);
