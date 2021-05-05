@@ -32,6 +32,7 @@ private:
 	lcdError estado;
 	char disp[FILMAX][COLMAX];
 	ALLEGRO_DISPLAY* displaylcd;
+	ALLEGRO_FONT* fuente;
 };
 
 

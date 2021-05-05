@@ -20,6 +20,7 @@ mylcd::mylcd() {
 			disp[i][j] = 0;
 		}
 	}
+	fuente = al_load_ttf_font("7SDD.ttf", 36, 0);
 }
 mylcd::~mylcd() {
 
@@ -180,8 +181,6 @@ void mylcd::printdisp() {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	string aux=""; 
 	string aux1 = "";
-	ALLEGRO_FONT* font = NULL;
-	font = al_load_ttf_font("7SDD.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA :frowning: 
 	for (int i = 0; i < FILMAX; ++i) {
 		for (int j = 0; (j < COLMAX); ++j) {
 			cout << disp[i][j];
@@ -205,8 +204,8 @@ void mylcd::printdisp() {
 		cout << endl;
 	}
 	cout << endl;
-	al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
-	al_draw_text(font, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
+	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
+	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
 	al_flip_display();
 }
 void mylcd::dispmoveleft() {
