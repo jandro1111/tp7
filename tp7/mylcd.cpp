@@ -1,4 +1,5 @@
 #include "mylcd.h"
+
 using namespace std;
 /// basic lcd
 
@@ -10,6 +11,8 @@ basicLCD::~basicLCD() {
 }
 /// my lcd
 mylcd::mylcd() {
+	displaylcd = al_create_display(600, 400);
+	al_set_window_title(displaylcd, "Display 2");
 	cursor.column = 0;
 	cursor.row = 0;
 	for (int i = 0; i < FILMAX; ++i) {
@@ -173,19 +176,30 @@ cursorPosition mylcd::lcdGetCursorPosition() {
 	return cursor;
 }
 void mylcd::printdisp() {
+	al_set_target_backbuffer(displaylcd);
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	string aux=""; 
 	string aux1 = "";
 	ALLEGRO_FONT* font = NULL;
 	font = al_load_ttf_font("7SDD.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA :frowning: 
 	for (int i = 0; i < FILMAX; ++i) {
-		for (int j = 0; j < COLMAX; ++j) {
+		for (int j = 0; (j < COLMAX); ++j) {
 			cout << disp[i][j];
 			if (i == 0) {
-				aux += disp[i][j];
+				if (disp[i][j] >= 32 && disp[i][j] <= 254) {
+					aux += '\0';
+				}
+				else {
+					aux += disp[i][j];
+				}
 			}
 			else {
-				aux1 += disp[i][j];
+				if (disp[i][j] >= 32 && disp[i][j] <= 254) {
+					aux += '\0';
+				}
+				else {
+					aux += disp[i][j];
+				}
 			}
 		}
 		cout << endl;

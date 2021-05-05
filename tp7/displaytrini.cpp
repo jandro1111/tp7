@@ -259,6 +259,7 @@ bool displayTrini::allegroInit() {
 		//error.setError("Display error", "No se pudo inicializar el display", DISPLAY);
 		return false;
 	}
+	al_set_window_title(all.display, "Display 3");
 	if (!(all.font = al_load_ttf_font(FONT_TRINI, 100, 0))) {
 		cout << "failed to load font!" << endl;
 		al_destroy_display(all.display);
@@ -282,7 +283,6 @@ bool displayTrini::allegroInit() {
 void displayTrini::draw(void) {
 	al_set_target_backbuffer(all.display);
 	al_clear_to_color(ALLEGRO_COLOR(BLACK));
-	al_draw_line(cursor.column * 50, cursor.row * 100, cursor.column * 50, cursor.row * 100 + 100, ALLEGRO_COLOR(LIGHT_BLUE), 3);
 
 	string helpMe;
 

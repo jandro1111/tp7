@@ -12,11 +12,21 @@ using namespace std;
 
 int main(void)
 {
-	init_allegro();
-	gui_init();
-	int canttwits = 3;
+	int error = 0;
+	error = init_allegro();
+	if (!error)
+	{
+		return -1;
+	}
+	error = gui_init();
+	if (!error)
+	{
+		return -1;
+	}
+	int canttwits = 0;
 	int boton = DONO;
-	string autor = "lanacion";
+	string autor;
+	gui_input(boton, canttwits, autor);
 	basicLCD* lcd;
 	claselcd1 lcd1;
 	mylcd lcd2;
@@ -25,41 +35,59 @@ int main(void)
 	cursorPosition cursor;
 	list<twits>tweet;
 	list <twits> :: iterator twit;
-	int h = dostuff(autor,canttwits,tweet);
+	if (canttwits <= 0)
+	{
+		error = dostuff(autor, tweet);
+	}
+	else
+	{
+		error = dostuff(autor, canttwits, tweet);
+	}
 	twit = tweet.begin();
 	char* body = &((twit->author)[0]);
 	int pos = 0;
-
-	//while (boton != CANCEL /*&& descarga_no_terminada*/)
-	//{
-	//	cursor = { 0,0 };
-	//	lcd->lcdSetCursorPosition(cursor);
-	//	for (int i = 0; i < 16; i++)
-	//	{
-	//		*lcd << ((body)[i]);
-	//	}
-	//	cursor = { 1,0 };
-	//	lcd->lcdSetCursorPosition(cursor);
-	//	for (int i = 0; i < 16; i++)
-	//	{
-	//		if (i >= 0 && i > (pos - 4) && i <= (pos))
-	//		{
-	//			*lcd << '=';
-	//		}
-	//		else
-	//		{
-	//			*lcd << ' ';
-	//		}
-	//	}
-	//	if (pos == 19)
-	//	{
-	//		pos = -1;
-	//	}
-	//	pos++;
-	//	//Se apreto un boton?
-	//	al_rest(0.1);
-	//}
-
+	float vel = 0;
+	while (boton != CANCEL /*&& descarga_no_terminada*/)
+	{
+		cursor = { 0,0 };
+		lcd->lcdSetCursorPosition(cursor);
+		for (int i = 0; i < 16; i++)
+		{
+			*lcd << ((body)[i]);
+		}
+		cursor = { 1,0 };
+		lcd->lcdSetCursorPosition(cursor);
+		for (int i = 0; i < 16; i++)
+		{
+			if (i >= 0 && i > (pos - 4) && i <= (pos))
+			{
+				*lcd << '=';
+			}
+			else
+			{
+				*lcd << ' ';
+			}
+		}
+		if (pos == 19)
+		{
+			pos = -1;
+		}
+		pos++;
+		gui_searching(boton);
+		switch (boton)
+		{
+		case LCD1:
+			lcd = &lcd1;
+			break;
+		case LCD2:
+			lcd = &lcd2;
+			break;
+		case LCD3:
+			lcd = &lcd3;
+			break;
+		}
+	}
+	boton = DONO;
 	body = &((twit->body)[0]);
 
 	while (boton != EXIT)
@@ -80,8 +108,8 @@ int main(void)
 			{
 				body++;
 			}
-			//Se apreto un boton?
-			al_rest(0.1);
+			gui_showtw(boton, vel);
+			al_rest(vel);
 		}
 		switch (boton)
 		{

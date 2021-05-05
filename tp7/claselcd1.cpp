@@ -210,6 +210,7 @@ bool claselcd1::lcdCharIn(cursorPosition pos, char character)
 
 bool claselcd1::lcdDisplayUpdate()	//Actualiza el display
 {
+	al_set_target_backbuffer(display);
 	al_clear_to_color(BACKCOLOR);
 	for (int i = 0; i <= 1; ++i)
 	{

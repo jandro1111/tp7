@@ -31,6 +31,7 @@ private:
 	cursorPosition cursor;//row 0-1 column 0-19
 	lcdError estado;
 	char disp[FILMAX][COLMAX];
+	ALLEGRO_DISPLAY* displaylcd;
 };
 
 
