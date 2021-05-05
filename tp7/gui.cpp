@@ -111,7 +111,7 @@ void gui_input(int& flag, int& canttwits, string& autor)
 	flag = DONO;
 }
 
-void gui_searching(int& flag)
+void gui_searching(int& flag, int downtwits)
 {
 		al_set_target_backbuffer(displaygui);
 		ALLEGRO_EVENT ev;
@@ -127,7 +127,8 @@ void gui_searching(int& flag)
 		ImGui_ImplAllegro5_NewFrame();
 		ImGui::NewFrame();
 		ImGui::Begin("SEARCHING");
-		if (ImGui::Button("Cancel")) {
+		ImGui::Text("Se bajaron %d tweets.", downtwits);
+		if (ImGui::Button("Continue")) {
 			flag = CANCEL;
 		}
 		if (ImGui::Button("Display1")) {

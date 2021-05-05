@@ -145,7 +145,7 @@ basicLCD& displayTrini::operator<<(unsigned const char c) {
 		cursor.row += 1;
 		cursor.column = COLMIN;
 	}
-	else if ((cursor.column == (COLMAX - 1)) && (cursor.row == FILAMAX)) {
+	else if ((cursor.column == (COLMAX - 1)) && (cursor.row == (FILAMAX-1))) {
 		cursor.row -= 1;
 		cursor.column = COLMIN;
 	}
@@ -287,17 +287,28 @@ void displayTrini::draw(void) {
 	string helpMe;
 
 	// Ugly hack
-	helpMe = str[0];
+	/*helpMe = str[0];
 	while (helpMe.size() > COLMAX) {
 		helpMe.pop_back();
+	}*/
+	for (int i = 0; (i < 16) && (str[0][i] != '\0'); i++)
+	{
+		helpMe.push_back(str[0][i]);
 	}
+	helpMe.push_back('\0');
 	al_draw_textf(all.font, ALLEGRO_COLOR(WHITE), 0, 0, 0, "%s", helpMe.c_str());
 
 	// Ugly hack
-	helpMe = str[1];
+	/*helpMe = str[1];
 	while (helpMe.size() > COLMAX) {
 		helpMe.pop_back();
+	}*/
+	helpMe.clear();
+	for (int i = 0; (i < 16) && (str[1][i] != '\0'); i++)
+	{
+		helpMe.push_back(str[1][i]);
 	}
+	helpMe.push_back('\0');
 	al_draw_textf(all.font, ALLEGRO_COLOR(WHITE), 0, al_get_font_line_height(all.font), 0, "%s", helpMe.c_str());
 
 	al_flip_display();

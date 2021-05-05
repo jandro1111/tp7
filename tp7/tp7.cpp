@@ -31,7 +31,7 @@ int main(void)
 	claselcd1 lcd1;
 	mylcd lcd2;
 	displayTrini lcd3;
-	lcd = &lcd1;
+	lcd = &lcd3;
 	cursorPosition cursor;
 	list<twits>tweet;
 	list <twits> :: iterator twit;
@@ -72,7 +72,7 @@ int main(void)
 			pos = -1;
 		}
 		pos++;
-		gui_searching(boton);
+		gui_searching(boton, tweet.size());
 		switch (boton)
 		{
 		case LCD1:
@@ -121,8 +121,15 @@ int main(void)
 			{
 				twit++;
 			}
+			else
+			{
+				lcd->lcdClear();
+				cursor = { 0,0 };
+				lcd->lcdSetCursorPosition(cursor);
+				*lcd << "Ultimo Tweet";
+				al_rest(3);
+			}
 			body = &((twit->body)[0]);
-			//SE LLEGO AL FINAL DE LOS TWEETS
 			boton = DONO;
 			break;
 		case PREV:	//Pasa al twit anterior
@@ -150,12 +157,11 @@ int main(void)
 		}
 	}
 	gui_uninst();
+	destroy_allegro();
 	return 0;
 }
 
-//Destructor mylcd.cpp
-//Destroy fonts
+//Destroy de allegro en general
 //flujo del main
 //velocidad scroll bloqueante
-//Terminar la gui cuando termina la descarga
-//Font Jandro no tiene 3
+//Display Trini

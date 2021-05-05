@@ -22,7 +22,7 @@ void gui_uninst(void);
 
 void gui_input(int& flag, int& canttwits, string& autor);
 
-void gui_searching(int& flag);
+void gui_searching(int& flag, int downtwits);
 
 void gui_showtw(int& flag, float& vel);
 
