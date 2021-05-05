@@ -118,12 +118,19 @@ int main(void)
 			boton = DONO;
 			break;
 		case NEXT:	//Pasa al twit siguiente
-			twit++;
+			if (twit != (--(tweet.end())))
+			{
+				twit++;
+			}
 			body = &((twit->body)[0]);
+			//SE LLEGO AL FINAL DE LOS TWEETS
 			boton = DONO;
 			break;
 		case PREV:	//Pasa al twit anterior
-			twit--;
+			if (twit != tweet.begin())
+			{
+				twit--;
+			}
 			body = &((twit->body)[0]);
 			boton = DONO;
 			break;
