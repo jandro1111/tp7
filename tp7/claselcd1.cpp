@@ -12,8 +12,8 @@ claselcd1::claselcd1()
 
 claselcd1::~claselcd1()
 {
-	al_destroy_display(displaylcd1);	//Destruye el display y la font
 	al_destroy_font(fuente);
+	al_destroy_display(displaylcd1);	//Destruye el display y la font
 }
 
 bool claselcd1::lcdInitOk()

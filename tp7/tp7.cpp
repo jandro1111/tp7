@@ -154,5 +154,8 @@ int main(void)
 }
 
 //Destructor mylcd.cpp
+//Destroy fonts
 //flujo del main
 //velocidad scroll bloqueante
+//Terminar la gui cuando termina la descarga
+//Font Jandro no tiene 3

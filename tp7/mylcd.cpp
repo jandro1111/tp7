@@ -23,8 +23,8 @@ mylcd::mylcd() {
 	fuente = al_load_ttf_font("7SDD.ttf", 36, 0);
 }
 mylcd::~mylcd() {
-	al_destroy_display(displaylcd);	//Destruye el display y la font
 	al_destroy_font(fuente);
+	al_destroy_display(displaylcd);	//Destruye el display y la font
 }
 bool mylcd::lcdInitOk() {
 	return 1;

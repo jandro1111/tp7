@@ -49,7 +49,6 @@ int gui_init(void){
 	ImGui_ImplAllegro5_Init(displaygui); // Inicializa Dear ImGui
 	ImGuiIO& io = ImGui::GetIO();
 
-	al_clear_to_color(al_map_rgb(255,0,0));
 	ImGui::StyleColorsLight();
 	al_flip_display();
 	return true;
