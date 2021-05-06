@@ -70,36 +70,36 @@ void gui_input(int& flag, int& canttwits, string& autor)
 	autor.clear();
 	//variables auxiliares que usan los widgets
 	char tempstring[15] = {};
-	while (flag != GO && flag != CLOSE)
+	while (flag != GO)
 	{
 		ALLEGRO_EVENT ev;
 		while (al_get_next_event(eventQueue, &ev))
 		{
 			ImGui_ImplAllegro5_ProcessEvent(&ev);	// Mandar el evento a Dear ImGui para que lo procese
-
-			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-				flag = CLOSE;
 		}
 
 		// Inicio el frame. Se realiza una vez por cada pantalla que dibujo.
 		ImGui_ImplAllegro5_NewFrame();
 		ImGui::NewFrame();
-
 		ImGui::Begin("INPUTS");
+		if (flag == WRONG)
+		{
+			ImGui::Text("Username can't be empty");
+		}
 		if (ImGui::Button("GO")) {
 			flag = GO;
 		}
 		if (autor == "")
 		{
-			ImGui::InputText("Usuario", tempstring, 15);
+			ImGui::InputText("Username", tempstring, 15);
 		}
 		if (flag == GO)
 		{
 			autor = string(tempstring);
 		}
 
-		static int i0 = 20;
-		ImGui::InputInt("Cantidad de tweets", &i0);
+		static int i0 = 0;
+		ImGui::InputInt("Amount of tweets", &i0);
 		canttwits = i0;
 		ImGui::End();
 		ImGui::Render();	//No dibuja! Solamente calcula que es lo que tiene que dibujarse
@@ -107,6 +107,11 @@ void gui_input(int& flag, int& canttwits, string& autor)
 		al_clear_to_color(al_map_rgba_f(1, 1, 0.8, 1));	//Va a quedar detras de las ventanas.
 		ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());	//Dibuja las ventanas, pero no hace al_flip_display()
 		al_flip_display(); //DearImGui nunca hace al_flip_display()
+		if (flag == WRONG)
+		{
+			al_rest(1);
+			flag = DONO;
+		}
 	}
 	flag = DONO;
 }
@@ -118,9 +123,6 @@ void gui_searching(int& flag, int downtwits)
 		while (al_get_next_event(eventQueue, &ev))
 		{
 			ImGui_ImplAllegro5_ProcessEvent(&ev);	// Mandar el evento a Dear ImGui para que lo procese
-
-			if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-				flag = CLOSE;
 		}
 
 		// Inicio el frame. Se realiza una vez por cada pantalla que dibujo.
@@ -155,8 +157,6 @@ void gui_showtw (int& flag, float& vel){
 	{
 		ImGui_ImplAllegro5_ProcessEvent(&ev);	// Mandar el evento a Dear ImGui para que lo procese
 
-		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			flag = CLOSE;
 	}
 
 	// Inicio el frame. Se realiza una vez por cada pantalla que dibujo.
@@ -184,6 +184,37 @@ void gui_showtw (int& flag, float& vel){
 	}
 	if (ImGui::Button("Display3")) {
 		flag = LCD3;
+	}
+	ImGui::End();
+	ImGui::Render();	//No dibuja! Solamente calcula que es lo que tiene que dibujarse
+
+	al_clear_to_color(al_map_rgba_f(1, 1, 0.8, 1));	//Va a quedar detras de las ventanas.
+	ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());	//Dibuja las ventanas, pero no hace al_flip_display()
+	al_flip_display(); //DearImGui nunca hace al_flip_display()
+}
+
+void gui_ending(int& flag, int& cant) {
+	al_set_target_backbuffer(displaygui);
+	ALLEGRO_EVENT ev;
+	while (al_get_next_event(eventQueue, &ev))
+	{
+		ImGui_ImplAllegro5_ProcessEvent(&ev);	// Mandar el evento a Dear ImGui para que lo procese
+
+	}
+
+	// Inicio el frame. Se realiza una vez por cada pantalla que dibujo.
+	ImGui_ImplAllegro5_NewFrame();
+	ImGui::NewFrame();
+	ImGui::Begin("END");
+	ImGui::Text("Want to download more tweets?");
+	static int i0 = 0;
+	ImGui::InputInt("Cantidad de tweets", &i0);
+	cant += i0;
+	if (ImGui::Button("GO")) {
+		flag = NEXT;
+	}
+	if (ImGui::Button("Exit")) {
+		flag = EXIT;
 	}
 	ImGui::End();
 	ImGui::Render();	//No dibuja! Solamente calcula que es lo que tiene que dibujarse

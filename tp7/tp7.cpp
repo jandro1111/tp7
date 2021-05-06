@@ -25,30 +25,69 @@ int main(void)
 	}
 	int canttwits = 0;
 	int boton = DONO;
-	string autor;
-	gui_input(boton, canttwits, autor);
+	string autor = "";
+	string errorcurl = "NoError";
+	while (autor == "")
+	{
+		gui_input(boton, canttwits, autor);
+		if (autor == "")
+		{
+			boton = WRONG;
+		}
+	}
 	basicLCD* lcd;
 	claselcd1 lcd1;
 	mylcd lcd2;
 	displayTrini lcd3;
-	lcd = &lcd3;
+	lcd = &lcd1;
 	cursorPosition cursor;
 	list<twits>tweet;
 	list <twits> :: iterator twit;
 	if (canttwits <= 0)
 	{
-		error = dostuff(autor, tweet);
+		error = dostuff(autor, tweet, errorcurl);
 	}
 	else
 	{
-		error = dostuff(autor, canttwits, tweet);
+		error = dostuff(autor, canttwits, tweet, errorcurl);
 	}
+	int exit_screen = false;
+	errorcurl = "Este es un error muy muy muy largo asi ocupa mas de 16 caracteres de mierda";
+	if (errorcurl != "NoError")
+	{
+		char* errorcurlstr = &errorcurl[0];
+		while (exit_screen == false)
+		{
+			cursor = { 0,0 };
+			lcd->lcdSetCursorPosition(cursor);
+			*lcd << "Error, Exiting!";
+			cursor = { 1,0 };
+			lcd->lcdSetCursorPosition(cursor);
+			for (int i = 0; (i < 16) && (((errorcurlstr)[i]) != '\0'); i++)
+			{
+				*lcd << ((errorcurlstr)[i]);
+			}
+			if ((string(errorcurlstr)).length() > 16)	//No toma el terminador
+			{
+				errorcurlstr++;
+			}
+			else
+			{
+				exit_screen = true;
+			}
+			al_rest(0.1);
+		}
+		al_rest(2);
+		gui_uninst();
+		destroy_allegro();
+		return -1;
+	}
+	//LISTA NO VACIO!!!!!!!!!!!!!!!!!!!!!!!
 
 	twit = tweet.begin();
 	char* body;
 	int pos = 0;
 	float vel = 0;
-
 	while (boton != CANCEL /*&& descarga_no_terminada*/)
 	{
 		cursor = { 0,0 };
@@ -76,13 +115,19 @@ int main(void)
 		switch (boton)
 		{
 		case LCD1:
+			lcd->lcdClear();
 			lcd = &lcd1;
+			boton = DONO;
 			break;
 		case LCD2:
+			lcd->lcdClear();
 			lcd = &lcd2;
+			boton = DONO;
 			break;
 		case LCD3:
+			lcd->lcdClear();
 			lcd = &lcd3;
+			boton = DONO;
 			break;
 		}
 	}
@@ -127,7 +172,7 @@ int main(void)
 				cursor = { 0,0 };
 				lcd->lcdSetCursorPosition(cursor);
 				*lcd << "Ultimo Tweet";
-				al_rest(3);
+				al_rest(1);
 			}
 			body = &((twit->body)[0]);
 			boton = DONO;
@@ -141,14 +186,17 @@ int main(void)
 			boton = DONO;
 			break;
 		case LCD1:	//Cambia el display en uso
+			lcd->lcdClear();
 			lcd = &lcd1;
 			boton = DONO;
 			break;
 		case LCD2:
+			lcd->lcdClear();
 			lcd = &lcd2;
 			boton = DONO;
 			break;
 		case LCD3:
+			lcd->lcdClear();
 			lcd = &lcd3;
 			boton = DONO;
 			break;
@@ -156,12 +204,18 @@ int main(void)
 			break;
 		}
 	}
+	lcd->lcdClear();
+	boton = DONO;
+	while (boton != EXIT)
+	{
+		gui_ending(boton, canttwits);
+	}
 	gui_uninst();
 	destroy_allegro();
 	return 0;
 }
 
-//Destroy de allegro en general
 //flujo del main
 //velocidad scroll bloqueante
-//Display Trini
+
+//Limpiar main y comentar

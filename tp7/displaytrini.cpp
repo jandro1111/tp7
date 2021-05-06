@@ -22,7 +22,6 @@ displayTrini::displayTrini() {
 
 //Destructor
 displayTrini::~displayTrini() {
-	cout << "destructor called \n" << endl;
 	lcdClear();
 	allegroDestroy();
 }
@@ -85,7 +84,7 @@ bool displayTrini::lcdMoveCursorDown() {
 	}
 }
 
-bool displayTrini::lcdMoveCursorRight() {
+bool displayTrini::lcdMoveCursorRight() {  //ACORDARME DE ESTE CAMBIO, CUANDO EL CURSOR LLEGA AL FINAL DEL DISPLAY VUELVE AL INICIO
 	if (cursor.column < COLMAX) {
 		cursor.column += 1;
 		draw();
@@ -98,7 +97,9 @@ bool displayTrini::lcdMoveCursorRight() {
 	}
 	else if ((cursor.row == (FILAMAX - 1)) && (cursor.column == (COLMAX - 1))) {
 		//error.setError("MoveCursorRight error", "El cursor se encontraba al final del display", RIGHT_BOUNDARY);
-		return false;
+		cursor.row = FILAMIN;
+		cursor.column = COLMIN;
+		return true;
 	}
 	return false;
 }
@@ -154,70 +155,113 @@ basicLCD& displayTrini::operator<<(unsigned const char c) {
 }
 
 basicLCD& displayTrini::operator<<(const char* c) {
-	string lcdString;
-	string temp = ((const char*)c);
+	//string lcdString;
+	//string temp = ((const char*)c);
+	int size = 0;
+	char term = *c;
+	int i = 0;
 
-	lcdString.reserve(FILAMAX * COLMAX);
-	for (int i = 0; i < FILAMAX; i++) {
-		lcdString += this->str[i];
+	while (term != '\0')
+	{
+		term = *(c + i);  //Busca el terminador para poder determinar el tamanio del string enviado
+		size++;
+		i++;
 	}
-
-	if (temp.size() <= 32) {
-		while ((size_t)CURSOR_POSITION > lcdString.length()) {
-			lcdString += ' ';
+	if (size < 32)   //Si es menor que 32 guardo sin problemas en el arreglo el string
+	{
+		int cont = 0;
+		while (cont <= size)
+		{
+			int i = cursor.row;
+			int j = cursor.column;
+			str[i][j] = *(c + i * FILAMAX + j);
+			cont++;
+			lcdMoveCursorRight();
 		}
-
-		int totalNewPosition = 0;
-		cursorPosition cur = { 0, 0 };
-
-		if (CURSOR_POSITION + temp.size() < FILAMAX * COLMAX) {
-			lcdString.replace(CURSOR_POSITION, temp.size(), temp);
-		
-			totalNewPosition = (int)temp.size() + CURSOR_POSITION;
-		}
-		else {
-			size_t charsCopied = FILAMAX * COLMAX - CURSOR_POSITION;
-			lcdString.replace(CURSOR_POSITION, charsCopied, temp, 0, charsCopied);
-			lcdString.replace(0, temp.size() - charsCopied, temp, charsCopied, temp.size() - charsCopied);
-
-			totalNewPosition = (int)(temp.size() - charsCopied);
-		}
-		if (totalNewPosition % (FILAMAX*COLMAX) == 0) {
-			cur.row = 0;
-			cur.column= 0;
-		}
-		else {
-			cur.row = (int)(totalNewPosition / (FILAMAX*COLMAX));
-			cur.column = (int)(totalNewPosition - cur.row * (FILAMAX*COLMAX));
-		}
-
-		lcdSetCursorPosition(cur);
+		//if ((cursor.column * cursor.row) < (FILAMAX * COLMAX))
+		//{
+		//	for (int fil = cursor.row; fil < FILAMAX; fil++)
+		//	{
+		//		for (int col = cursor.column; col < COLMAX; col++)
+		//		{
+		//			str[fil][col] = ' ';
+		//		}
+		//	}
+		//}
 	}
-	else {
-		//error.setError("Writing exceeded error", "El maximo largo es de 32 caracteres", WRITING_EXCEEDED);
-		lcdString.assign(temp, temp.length() - FILAMAX * COLMAX, FILAMAX * COLMAX);
-		cursorPosition cur = {0, 0};
-	}
-	
-	string piece;
-	bool foundEndOfString = false;
-	for (int i = 0; i < FILAMAX; i++) {
-		piece = lcdString.substr(piece.size() * i, COLMAX);
-		const char * newStr = piece.c_str();
-
-		for (int j = 0; j < COLMAX; j++) {
-			if (!foundEndOfString) {
-				str[i][j] = *(newStr + j);
-			}
-			else {
-				str[i][j] = '\0';
-			}
-
-			if (*(newStr + j) == '\0') {
-				foundEndOfString = true;
+	else //Si el string es mas largo que el display, solo se muestra la ultima parte
+	{
+		for (int i = 0; i < FILAMAX; i++)
+		{
+			for (int j = 0; j < COLMAX; j++)
+			{
+				str[i][j] = *(c + size - (FILAMAX * COLMAX));
 			}
 		}
 	}
+
+	//	lcdString.reserve(FILAMAX * COLMAX);
+		//for (int i = 0; i < FILAMAX; i++) {
+		//	lcdString += this->str[i];
+		//}
+		//lcdString.resize(32);
+
+		//if (temp.size() <= 32) {
+		//	while ((size_t)CURSOR_POSITION > lcdString.length()) {
+		//		lcdString += ' ';
+		//	}
+
+		//	int totalNewPosition = 0;
+		//	cursorPosition cur = { 0, 0 };
+
+		//	if (CURSOR_POSITION + temp.size() < FILAMAX * COLMAX) {
+		//		lcdString.replace(CURSOR_POSITION, temp.size(), temp);
+
+		//		totalNewPosition = (int)temp.size() + CURSOR_POSITION;
+		//	}
+		//	else {
+		//		size_t charsCopied = FILAMAX * COLMAX - CURSOR_POSITION;
+		//		lcdString.replace(CURSOR_POSITION, charsCopied, temp, 0, charsCopied);
+		//		lcdString.replace(0, temp.size() - charsCopied, temp, charsCopied, temp.size() - charsCopied);
+
+		//		totalNewPosition = (int)(temp.size() - charsCopied);
+		//	}
+		//	if (totalNewPosition % (FILAMAX * COLMAX) == 0) {
+		//		cur.row = 0;
+		//		cur.column = 0;
+		//	}
+		//	else {
+		//		cur.row = (int)(totalNewPosition / (FILAMAX * COLMAX));
+		//		cur.column = (int)(totalNewPosition - cur.row * (FILAMAX * COLMAX));
+		//	}
+
+		//	lcdSetCursorPosition(cur);
+		//}
+		//else {
+		//	//error.setError("Writing exceeded error", "El maximo largo es de 32 caracteres", WRITING_EXCEEDED);
+		//	lcdString.assign(temp, temp.length() - FILAMAX * COLMAX, FILAMAX * COLMAX);
+		//	cursorPosition cur = { 0, 0 };
+		//}
+
+		//string piece;
+		//bool foundEndOfString = false;
+		//for (int i = 0; i < FILAMAX; i++) {
+		//	piece = lcdString.substr(piece.size() * i, COLMAX);
+		//	const char* newStr = piece.c_str();
+
+		//	for (int j = 0; j < COLMAX; j++) {
+		//		if (!foundEndOfString) {
+		//			str[i][j] = *(newStr + j);
+		//		}
+		//		else {
+		//			str[i][j] = '\0';
+		//		}
+
+		//		if (*(newStr + j) == '\0') {
+		//			foundEndOfString = true;
+		//		}
+		//	}
+		//}
 	draw();
 	return *this;
 }
@@ -229,11 +273,11 @@ basicLCD& displayTrini::operator<<(const char* c) {
 
 bool displayTrini::allegroInit() {
 	//ALLEGRO AND ALLEGRO ADDONS INITIALIZATION
-	if (!al_init()) {
+	/*if (!al_init()) {
 		fprintf(stderr, "Failed to initialize allegro!\n");
 		return false;
-	}
-	if (!al_init_image_addon()) {
+	}*/
+	/*if (!al_init_image_addon()) {
 		fprintf(stderr, "Failed to initialize image addon!\n");
 		return false;
 	}
@@ -244,16 +288,7 @@ bool displayTrini::allegroInit() {
 	if (!al_init_ttf_addon()) {
 		fprintf(stderr, "Failed to initialize allegro ttf fonts!\n");
 		return false;
-	}
-	if (!al_init_primitives_addon())
-	{
-		fprintf(stderr, "failed to initialize primitives!\n");
-		return false;
-	}
-	if (!al_install_keyboard()) {
-		fprintf(stderr, "Failed to initialize allegro keyboard!\n");
-		return false;
-	}
+	}*/
 	if (!(all.display = al_create_display(WIDTH, HEIGHT))) {
 		cout << "failed to create display!" << endl;
 		//error.setError("Display error", "No se pudo inicializar el display", DISPLAY);
@@ -266,17 +301,17 @@ bool displayTrini::allegroInit() {
 		//error.setError("Font error", "No se pudo inicializar la fuente", FONT);
 		return false;
 	}
-	all.eventQueue = al_create_event_queue();
+	/*all.eventQueue = al_create_event_queue();
 	if (!all.eventQueue) {
 		cout << "failed to load event queue!" << endl;
 		al_destroy_display(all.display);
 		al_destroy_font(all.font);
 		return false;
-	}
+	}*/
 
 	al_flip_display();
-	al_register_event_source(all.eventQueue, al_get_keyboard_event_source());              //Evento teclado      
-	al_register_event_source(all.eventQueue, al_get_display_event_source(all.display));        //Cruz de salir
+	//al_register_event_source(all.eventQueue, al_get_keyboard_event_source());              //Evento teclado      
+	//al_register_event_source(all.eventQueue, al_get_display_event_source(all.display));        //Cruz de salir
 	return true;
 }
 
@@ -316,10 +351,9 @@ void displayTrini::draw(void) {
 
 void displayTrini::allegroDestroy() {
 	al_destroy_font(all.font);
-	al_destroy_event_queue(all.eventQueue);
+	//al_destroy_event_queue(all.eventQueue);
 	al_destroy_display(all.display);
-	al_shutdown_font_addon();
-	al_shutdown_ttf_addon();
-	al_uninstall_keyboard();
-	return;
+	//al_shutdown_font_addon();
+	//al_shutdown_ttf_addon();
+	//al_uninstall_keyboard();
 }

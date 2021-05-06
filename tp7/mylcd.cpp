@@ -11,6 +11,7 @@ basicLCD::~basicLCD() {
 }
 /// my lcd
 mylcd::mylcd() {
+	fuente = al_load_ttf_font("7SDD.ttf", 36, 0);
 	displaylcd = al_create_display(600, 400);
 	al_set_window_title(displaylcd, "Display 2");
 	cursor.column = 0;
@@ -20,7 +21,6 @@ mylcd::mylcd() {
 			disp[i][j] = 0;
 		}
 	}
-	fuente = al_load_ttf_font("7SDD.ttf", 36, 0);
 }
 mylcd::~mylcd() {
 	al_destroy_font(fuente);

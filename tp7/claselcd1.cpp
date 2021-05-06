@@ -14,6 +14,8 @@ claselcd1::~claselcd1()
 {
 	al_destroy_font(fuente);
 	al_destroy_display(displaylcd1);	//Destruye el display y la font
+	al_shutdown_font_addon();
+	al_shutdown_ttf_addon();
 }
 
 bool claselcd1::lcdInitOk()

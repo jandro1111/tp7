@@ -14,8 +14,8 @@
 std::string dateadj(std::string date);
 void printNames(std::list<std::string> names, std::list<twits>&,string);
 static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp);
-int dostuff(string ,std::list<twits>&);
-int dostuff(string, int, std::list<twits>&);
+int dostuff(string ,std::list<twits>&, string& error);
+int dostuff(string, int, std::list<twits>&, string& error);
 
 
 #endif

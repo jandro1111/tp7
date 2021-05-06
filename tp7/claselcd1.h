@@ -5,6 +5,8 @@
 #include "basicLCD.h"
 #include <allegro5/display.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_ttf.h>
 
 #define ALTODISPLAY 100
 #define ANCHODISPLAY 800

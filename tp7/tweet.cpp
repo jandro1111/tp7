@@ -1,7 +1,7 @@
 #include "tweet.h"
 using json = nlohmann::json;
 
-int dostuff(string autor, std::list<twits>& tweet) {
+int dostuff(string autor, std::list<twits>& tweet, string& error) {
 	json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 	// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -74,13 +74,12 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		res = curl_easy_perform(curl);
 		//
 
-		//ACA imgui interrupcion
 
 		//
 		// Nos fijamos si hubo algún error
 		if (res != CURLE_OK)
 		{
-			std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+			error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 			//Hacemos un clean up de curl antes de salir.
 			curl_easy_cleanup(curl);
 			return 0;
@@ -105,13 +104,13 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		catch (std::exception& e)
 		{
 			//Si hubo algun error, se muestra el error que devuelve la libreria
-			std::cerr << e.what() << std::endl;
+			error = e.what();
 			return 0;
 		}
 	}
 	else
 	{
-		std::cout << "Cannot download tweets. Unable to start cURL" << std::endl;
+		error = "Cannot download tweets. Unable to start cURL";
 		return 0;
 	}
 
@@ -161,7 +160,7 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		//Checkeamos errores
 		if (res != CURLE_OK)
 		{
-			std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+			error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 			//Hacemos un clean up de curl antes de salir.
 			curl_easy_cleanup(curl);
 			return 0;
@@ -181,7 +180,7 @@ int dostuff(string autor, std::list<twits>& tweet) {
 				names.push_back(element["text"]);
 			}
 			std::cout << "Tweets retrieved from Twitter account: " << std::endl;
-			printNames(names,tweet,autor);
+			printNames(names, tweet, autor);
 		}
 		catch (std::exception& e)
 		{
@@ -190,10 +189,10 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		}
 	}
 	else
-		std::cout << "Cannot download tweets. Unable to start cURL" << std::endl;
+		error = "Cannot download tweets. Unable to start cURL";
 	return 0;
 }
-	int dostuff(string autor,int cant, std::list<twits>& tweet) {
+	int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
 		json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 		// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -268,13 +267,11 @@ int dostuff(string autor, std::list<twits>& tweet) {
 			res = curl_easy_perform(curl);
 			//
 
-			//ACA imgui interrupcion
-
 			//
 			// Nos fijamos si hubo algún error
 			if (res != CURLE_OK)
 			{
-				std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+				error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 				//Hacemos un clean up de curl antes de salir.
 				curl_easy_cleanup(curl);
 				return 0;
@@ -294,18 +291,18 @@ int dostuff(string autor, std::list<twits>& tweet) {
 				//Tratamos de acceder al campo acces_token del JSON
 				std::string aux = j["access_token"];
 				token = aux;
-				std::cout << "Bearer Token get from Twitter API: \n" << token << std::endl;
+				error = "Bearer Token get from Twitter API: \n" + token;
 			}
 			catch (std::exception& e)
 			{
 				//Si hubo algun error, se muestra el error que devuelve la libreria
-				std::cerr << e.what() << std::endl;
+				error = e.what();
 				return 0;
 			}
 		}
 		else
 		{
-			std::cout << "Cannot download tweets. Unable to start cURL" << std::endl;
+			error = "Cannot download tweets. Unable to start cURL";
 			return 0;
 		}
 
@@ -357,7 +354,7 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		//Checkeamos errores
 		if (res != CURLE_OK)
 		{
-			std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+			error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 			//Hacemos un clean up de curl antes de salir.
 			curl_easy_cleanup(curl);
 			return 0;
@@ -382,11 +379,11 @@ int dostuff(string autor, std::list<twits>& tweet) {
 		catch (std::exception& e)
 		{
 			//Muestro si hubo un error de la libreria
-			std::cerr << e.what() << std::endl;
+			error = e.what();
 		}
 	}
 	else
-		std::cout << "Cannot download tweets. Unable to start cURL" << std::endl;
+		error = "Cannot download tweets. Unable to start cURL";
 	return 0;
 }
 

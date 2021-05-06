@@ -26,4 +26,6 @@ void gui_searching(int& flag, int downtwits);
 
 void gui_showtw(int& flag, float& vel);
 
+void gui_ending(int& flag, int& cant);
+
 #endif
