@@ -20,12 +20,13 @@ int main(void)
 
 	prog_exit = inits();	//Inicializa allegro y la gui
 
+	bool islcd[3] = { true, false, false };
 	string autor = "";	//Guarda el usuario a buscar
-	basicLCD* lcd;	//Puntero al display principal
+	string errorcurl = "NoError";
 	claselcd1 lcd1;
 	mylcd lcd2;
 	displayTrini lcd3;
-	lcd = &lcd1;
+	basicLCD* lcd[3] = {&lcd1, &lcd2, &lcd3};	//Puntero al display principal
 	list<twits>tweet;	//Lista donde se almacenan los twits descargados
 	list <twits> :: iterator twit;	//Creo el iterador
 
@@ -56,22 +57,57 @@ int main(void)
 		if (boton != EXIT && prog_exit == false)
 		{
 			tweet.clear();
-			prog_exit = curltweets(canttwits, autor, tweet, lcd);	//Se descargan los tweets
+			prog_exit = curltweets(canttwits, autor, tweet, errorcurl);	//Se descargan los tweets
+			if (prog_exit == true)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					if (islcd[i] == true)
+					{
+						curlerror(lcd[i], errorcurl);
+					}
+					else
+					{
+						lcd[i]->lcdClear();
+					}
+				}
+				al_rest(2);
+			}
 			if ( (tweet.size() != 0) && (prog_exit == false))	//Si la lista no esta vacia
 			{
 				twit = tweet.begin();
 				int pos = 0;
 				while (boton != CANCEL && boton != EXIT)
 				{
-					lcd = pantallacarga(pos, boton, lcd, tweet, twit, &lcd1, &lcd2, &lcd3, prog_exit);	//Muestra la pantalla de carga mientras se descargan
+					gui_searching(boton, (int)tweet.size()); //se llama a la gui para poder cambiar de display mientras se cargan los tweets
+					changedisplay(boton, islcd, lcd);
+					for (int i = 0; i < 3; i++)
+					{
+						if (islcd[i] == true)
+						{
+							pantallacarga(pos, boton, lcd[i], tweet, twit, islcd, prog_exit);	//Muestra la pantalla de carga mientras se descargan
+						}
+					}
+					pos++;
+					if (pos == 19)
+					{
+						pos = -1;
+					}
+					al_rest(0.05);
 				}
 				boton = DONO;
-
+				for (int i = 0; i < 3; i++)
+				{
+					lcd[i]->lcdClear();
+				}
 				while (boton != EXIT && !prog_exit)
 				{
-					lcd = showtweets(boton,lcd,tweet,twit,&lcd1,&lcd2,&lcd3);	//Se muestran los twits y la gui para desplazarse
+					showtweets(boton, lcd, tweet, twit, islcd);	//Se muestran los twits y la gui para desplazarse
 				}
-				lcd->lcdClear();
+				for (int i = 0; i < 3; i++)
+				{
+					lcd[i]->lcdClear();
+				}
 				boton = DONO;
 			}
 			else

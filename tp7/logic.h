@@ -8,10 +8,13 @@
 //Inicializa allegro e ImGui
 bool inits();
 //Muestra la pantalla y gui mientras se cargan tweets
-basicLCD* pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, claselcd1* dlcd1, mylcd* dlcd2, displayTrini* dlcd3, bool& exit);
+void pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, bool* islcd, bool& exit);
 //Descarga los tweets
-bool curltweets(int& canttwits, string& autor, list<twits>& tweet, basicLCD* lcd);
+bool curltweets(int& canttwits, string& autor, list<twits>& tweet, string& errorcurl);
+//Muestra errores al descargar los tweets
+void curlerror(basicLCD* lcd, string& errorcurl);
 //Muestra la pantalla y gui para leer los tweets
-basicLCD* showtweets(int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, claselcd1* dlcd1, mylcd* dlcd2, displayTrini* dlcd3);
-
+void showtweets(int& boton, basicLCD** lcd, list<twits>& tweet, list<twits>::iterator& twit, bool* islcd);
+//Enciende o apaga pantallas
+void changedisplay(int& boton, bool* islcd, basicLCD** lcd);
 #endif // !LOGIC_H

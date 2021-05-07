@@ -14,11 +14,9 @@ bool inits() //inicializacion de allegro y la gui
 	return false;
 }
 
-bool curltweets(int& canttwits, string& autor, list<twits>& tweet, basicLCD* lcd) //descarga los tweets
+bool curltweets(int& canttwits, string& autor, list<twits>& tweet, string& errorcurl)
 {
-	int error = 0;
-	string errorcurl = "NoError";
-	cursorPosition cursor;
+	bool error = false;
 	if (canttwits <= 0)
 	{
 		error = dostuff(autor, tweet, errorcurl);
@@ -28,6 +26,12 @@ bool curltweets(int& canttwits, string& autor, list<twits>& tweet, basicLCD* lcd
 	{
 		error = dostuff(autor, canttwits, tweet, errorcurl);
 	}
+	return error;
+}
+
+void curlerror(basicLCD* lcd, string& errorcurl) //descarga los tweets
+{
+	cursorPosition cursor;
 	bool exit_screen = false;
 	if (errorcurl != "NoError") //si hubo un error al descargar los tweets, se muestra en el display un mensaje de error
 	{
@@ -54,17 +58,10 @@ bool curltweets(int& canttwits, string& autor, list<twits>& tweet, basicLCD* lcd
 			al_rest(0.1); //pausa para que no se pasen tan rapido los tweets en el display
 		}
 		exit_screen = false;
-		al_rest(2);
-		return true;
 	}
-	if (error != 0)
-	{
-		return true;
-	}
-	return false;
 }
 
-basicLCD* pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, claselcd1* dlcd1, mylcd* dlcd2, displayTrini* dlcd3, bool& exit) //muestra la pantalla de carga en el display
+void pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, bool* islcd, bool& exit) //muestra la pantalla de carga en el display
 {
 	cursorPosition cursor;
 	cursor = { 0,0 };
@@ -84,67 +81,44 @@ basicLCD* pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet,
 			*lcd << ' ';
 		}
 	}
-	if (pos == 19)
-	{
-		pos = -1;
-	}
-	pos++;
-	gui_searching(boton, tweet.size()); //se llama a la gui para poder cambiar de display mientras se cargan los tweets
-	al_rest(0.05);
 	count++;
-	switch (boton)
-	{
-	case LCD1: //cambia de lcd
-		lcd->lcdClear();
-		lcd = dlcd1;
-		boton = DONO;
-		break;
-	case LCD2:
-		lcd->lcdClear();
-		lcd = dlcd2;
-		boton = DONO;
-		break;
-	case LCD3:
-		lcd->lcdClear();
-		lcd = dlcd3;
-		boton = DONO;
-		break;
-	case EXIT:
-		exit = true;
-		break;
-	}
 	if (count == 40)
 	{
 		boton = CANCEL;
 		count = 0;
 	}
-	return lcd;
 }
 
-basicLCD* showtweets(int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, claselcd1* dlcd1, mylcd* dlcd2, displayTrini* dlcd3)  //muestra los tweets en el display
+void showtweets(int& boton, basicLCD** lcd, list<twits>& tweet, list<twits>::iterator& twit, bool* islcd)  //muestra los tweets en el display
 {
 	cursorPosition cursor;
-	static float vel = 0;
-	char* body;
-	body = &((twit->body)[0]);	//Carga el cuerpo del tweet
+	static float vel = 0.5;
+	char* body = &((twit->body)[0]);	//Carga el cuerpo del tweet
 	while (boton == DONO)
 	{
-		cursor = { 0,0 };
-		lcd->lcdSetCursorPosition(cursor);
-		*lcd << ((twit->date).c_str()); //muestra la fecha en el primer renglon del display
+		for (int j = 0; j < 3; j++)
+		{
+			if (islcd[j] == true)
+			{
+				cursor = { 0,0 };
+				lcd[j]->lcdSetCursorPosition(cursor);
+				*lcd[j] << ((twit->date).c_str()); //muestra la fecha en el primer renglon del display
 
-		cursor = { 1,0 };
-		lcd->lcdSetCursorPosition(cursor);
-		for (int i = 0; (i < 16) && (((body)[i]) != '\0'); i++) //muestra el tweet en la segunda fila del display
-		{
-			*lcd << ((body)[i]);
-		}
-		if ((string(body)).length() > 16)	//No toma el terminador
-		{
-			body++;
+				cursor = { 1,0 };
+				lcd[j]->lcdSetCursorPosition(cursor);
+				for (int i = 0; (i < 16) && (((body)[i]) != '\0'); i++) //muestra el tweet en la segunda fila del display
+				{
+					*lcd[j] << ((body)[i]);
+				}
+			}
+			if ((string(body)).length() > 16)	//No toma el terminador
+			{
+				body++;
+			}
 		}
 		gui_showtw(boton, vel); //muestra la gui
-		al_rest(vel/10); //espera el tiempo que se haya determinado en la gui para mostrar los tweets
+		changedisplay(boton, islcd, lcd);
+		al_rest(vel / 10); //espera el tiempo que se haya determinado en la gui para mostrar los tweets
 	}
 	switch (boton)
 	{
@@ -159,10 +133,16 @@ basicLCD* showtweets(int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>:
 		}
 		else
 		{
-			lcd->lcdClear();
-			cursor = { 0,0 };
-			lcd->lcdSetCursorPosition(cursor);
-			*lcd << "Ultimo Tweet";	//Informa que se llego al ultimo tweet
+			for (int i = 0; i < 3; i++)
+			{
+				if (islcd[i] == true)
+				{
+					lcd[i]->lcdClear();
+					cursor = { 0,0 };
+					lcd[i]->lcdSetCursorPosition(cursor);
+					*lcd[i] << "Ultimo Tweet";	//Informa que se llego al ultimo tweet
+				}
+			}
 			al_rest(1);
 		}
 		body = &((twit->body)[0]);
@@ -176,23 +156,51 @@ basicLCD* showtweets(int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>:
 		body = &((twit->body)[0]);
 		boton = DONO;
 		break;
-	case LCD1:	//Cambia el display en uso
-		lcd->lcdClear();
-		lcd = dlcd1;
+	}
+}
+
+void changedisplay(int& boton, bool* islcd, basicLCD** lcd)
+{
+	switch (boton)
+	{
+	case LCD1: //cambia de lcd
+		if (islcd[0] == true)
+		{
+			lcd[0]->lcdClear();
+			islcd[0] = false;
+		}
+		else
+		{
+			islcd[0] = true;
+		}
 		boton = DONO;
 		break;
 	case LCD2:
-		lcd->lcdClear();
-		lcd = dlcd2;
+		if (islcd[1] == true)
+		{
+			lcd[1]->lcdClear();
+			islcd[1] = false;
+		}
+		else
+		{
+			islcd[1] = true;
+		}
 		boton = DONO;
 		break;
 	case LCD3:
-		lcd->lcdClear();
-		lcd = dlcd3;
+		if (islcd[2] == true)
+		{
+			lcd[2]->lcdClear();
+			islcd[2] = false;
+		}
+		else
+		{
+			islcd[2] = true;
+		}
 		boton = DONO;
 		break;
-	default:
+	case EXIT:
+		boton = EXIT;
 		break;
 	}
-	return lcd;
 }

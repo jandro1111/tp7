@@ -185,14 +185,15 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 		catch (std::exception& e)
 		{
 			//Muestro si hubo un error de la libreria
-			error = e.what();
+			error = e.what() + readString;
 		}
 	}
 	else
 		error = "Cannot download tweets. Unable to start cURL";
 	return 0;
 }
-	int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
+
+int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
 		json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 		// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -306,8 +307,6 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 			return 1;
 		}
 
-
-
 	//Una vez obtenido el Token ahora voy a buscar los Twits
 
 	/************************************************************************************
@@ -379,7 +378,7 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 		catch (std::exception& e)
 		{
 			//Muestro si hubo un error de la libreria
-			error = e.what();
+			error = e.what() + readString;
 		}
 	}
 	else

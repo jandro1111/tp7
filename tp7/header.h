@@ -25,6 +25,13 @@ struct twits
 	string body;
 };
 
+struct islcd
+{
+	bool islcd1;
+	bool islcd2;
+	bool islcd3;
+};
+
 
 
 #endif //HEADER_H
