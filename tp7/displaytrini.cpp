@@ -137,7 +137,7 @@ cursorPosition displayTrini::lcdGetCursorPosition() {
 
 
 
-basicLCD& displayTrini::operator<<(unsigned const char c) {
+basicLCD& displayTrini::operator<<(const unsigned char c) {
 	str[cursor.row][cursor.column] = c;
 	if (cursor.column < (COLMAX - 1)) {
 		cursor.column += 1;
@@ -295,7 +295,7 @@ bool displayTrini::allegroInit() {
 		return false;
 	}
 	al_set_window_title(all.display, "Display 3");
-	if (!(all.font = al_load_ttf_font(FONT_TRINI, 100, 0))) {
+	if (!(all.font = al_load_ttf_font(FONT_TRINI, 80, 0))) {
 		cout << "failed to load font!" << endl;
 		al_destroy_display(all.display);
 		//error.setError("Font error", "No se pudo inicializar la fuente", FONT);
@@ -344,7 +344,7 @@ void displayTrini::draw(void) {
 		helpMe.push_back(str[1][i]);
 	}
 	helpMe.push_back('\0');
-	al_draw_textf(all.font, ALLEGRO_COLOR(WHITE), 0, al_get_font_line_height(all.font), 0, "%s", helpMe.c_str());
+	al_draw_textf(all.font, ALLEGRO_COLOR(WHITE), 0, 80, 0, "%s", helpMe.c_str());
 
 	al_flip_display();
 }

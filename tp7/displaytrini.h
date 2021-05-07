@@ -17,9 +17,9 @@
 #define FILAMIN 0
 
 #define HEIGHT 200
-#define WIDTH 800
+#define WIDTH 700
 
-#define FONT_TRINI "font.ttf"
+#define FONT_TRINI "Monda-Regular.ttf"
 
 #define BLACK al_map_rgb(0, 0, 0)
 #define LIGHT_BLUE al_map_rgb(12, 183, 242)

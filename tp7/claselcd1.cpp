@@ -4,7 +4,7 @@ claselcd1::claselcd1()
 {
 	displaylcd1 = NULL; fuente = NULL;
 	cursor = { 0, 0 };
-	fuente = al_load_font("colleges.ttf", SIZEFUENTE, 0);	// Carga la fuente
+	fuente = al_load_font("Montserrat-Black.ttf", SIZEFUENTE, 0);	// Carga la fuente
 	displaylcd1 = al_create_display(ANCHODISPLAY, ALTODISPLAY);	//Crea el display
 	al_set_window_title(displaylcd1, "Display 1");
 	lcdDisplayUpdate();
@@ -71,7 +71,7 @@ bool claselcd1::lcdClearToEOL()
 
 basicLCD& claselcd1::operator<<(const unsigned char c)
 {
-	if (lcdCharIn(cursor, c))	//Carga el caracter recibido en el parametro en la posicion recibida, si estos fueran validos
+	if (lcdCharIn(cursor, (unsigned char)c))	//Carga el caracter recibido en el parametro en la posicion recibida, si estos fueran validos
 	{
 		lcdMoveCursorRight();
 	}
@@ -81,7 +81,7 @@ basicLCD& claselcd1::operator<<(const unsigned char c)
 
 basicLCD& claselcd1::operator<<(const char* c)
 {
-	for (int i = 0; (i < 32) && (c[i] != '\0'); ++i)	//Carga el string recibido en el parametro en la posicion recibida, si estos fueran valido
+	for (int i = 0; (i < 32) && (c[i] != '\0'); ++i)	//Carga el string recibido en el parametro en la posicion recibida
 	{
 		if (lcdCharIn(cursor, c[i]))
 		{
@@ -188,17 +188,13 @@ cursorPosition claselcd1::lcdGetCursorPosition()
 	return cursor;	//Retorna la posicion del cursor
 }
 
-bool claselcd1::lcdCharIn(cursorPosition pos, char character)
+bool claselcd1::lcdCharIn(cursorPosition pos, const unsigned char character)
 {
 	if (lcdSetCursorPosition(pos))	//Valida la posicion del cursor
-	{	//Valida el caracter
-		/*if ( ((character >= 65) && (character <= 90)) || ((character >= 97) && (character <= 122)) || ((character >= 48) && (character <= 57)) 
-			|| (character == 36) || (character == 43) || (character == 45) || (character == 61) || (character == 34) || (character == 35) || (character == ' ')
-			|| (character == 39) || (character == 44) || (character == 46) || (character == 58) || (character == 59) || (character == 636) || (character == 33))
-		{*/
-			text[((cursor.row) * 16) + (cursor.column)] = character;
-			lcdDisplayUpdate();
-			return true;
+	{
+		text[((cursor.row) * 16) + (cursor.column)] = character;
+		lcdDisplayUpdate();
+		return true;
 		//}
 		//else
 		//{
@@ -212,15 +208,19 @@ bool claselcd1::lcdCharIn(cursorPosition pos, char character)
 
 bool claselcd1::lcdDisplayUpdate()	//Actualiza el display
 {
+	string tempstring;
+	int i, j;
 	al_set_target_backbuffer(displaylcd1);
 	al_clear_to_color(BACKCOLOR);
-	for (int i = 0; i <= 1; ++i)
+	for (i = 0; i <= 1; ++i)
 	{
-		for (int j = 0; j <= 15; ++j)
+		tempstring.clear();
+		for (j = 0; j <= 15; ++j)
 		{
-			char tempstring[2] = { (text[(i * 16) + (j)]), '\0' };
-			al_draw_text(fuente, FONTCOLOR, ((j) * 50) + OFFSET, (i) * 50, 0, tempstring);
+			tempstring.push_back((text[(i * 16) + (j)]));
 		}
+		tempstring.push_back('\0');
+		al_draw_textf(fuente, FONTCOLOR, 10, (i) * 100, 0, "%s", tempstring.c_str());
 	}
 	al_flip_display();
 	return true;

@@ -7,7 +7,7 @@
 #include <curl/curl.h>
 #include "json.hpp"
 #include "mylcd.h"
-#include<string>
+#include <string>
 #include"header.h"
 
 //Funciones auxiliares

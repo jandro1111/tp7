@@ -16,16 +16,17 @@
 #include "imstb_truetype.h"
 #include "header.h"
 
+//Inicializa ImGui
 int gui_init(void);
-
+//Desinstala Imgui
 void gui_uninst(void);
-
+//Permite el ingreso de usuario y cantidad de tweets a descargar
 void gui_input(int& flag, int& canttwits, string& autor);
-
+//Permite cancelar la descarga
 void gui_searching(int& flag, int downtwits);
-
+//Permite navegar por los tweets descargados
 void gui_showtw(int& flag, float& vel);
-
-void gui_ending(int& flag, int& cant);
+//Permite descargar mas tweets o terminar con la ejecucion
+int gui_ending(int& flag);
 
 #endif

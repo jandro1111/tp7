@@ -82,7 +82,7 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 			error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 			//Hacemos un clean up de curl antes de salir.
 			curl_easy_cleanup(curl);
-			return 0;
+			return 1;
 		}
 
 		// Si no hubo errores hago un clean up antes de realizar un nuevo query.
@@ -105,13 +105,13 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 		{
 			//Si hubo algun error, se muestra el error que devuelve la libreria
 			error = e.what();
-			return 0;
+			return 1;
 		}
 	}
 	else
 	{
 		error = "Cannot download tweets. Unable to start cURL";
-		return 0;
+		return 1;
 	}
 
 	//Una vez obtenido el Token ahora voy a buscar los Twits
@@ -185,7 +185,7 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 		catch (std::exception& e)
 		{
 			//Muestro si hubo un error de la libreria
-			std::cerr << e.what() << std::endl;
+			error = e.what();
 		}
 	}
 	else
@@ -291,19 +291,19 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 				//Tratamos de acceder al campo acces_token del JSON
 				std::string aux = j["access_token"];
 				token = aux;
-				error = "Bearer Token get from Twitter API: \n" + token;
+				std::cout << "Bearer Token get from Twitter API: \n" << token << endl;;
 			}
 			catch (std::exception& e)
 			{
 				//Si hubo algun error, se muestra el error que devuelve la libreria
 				error = e.what();
-				return 0;
+				return 1;
 			}
 		}
 		else
 		{
 			error = "Cannot download tweets. Unable to start cURL";
-			return 0;
+			return 1;
 		}
 
 
@@ -357,7 +357,7 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 			error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 			//Hacemos un clean up de curl antes de salir.
 			curl_easy_cleanup(curl);
-			return 0;
+			return 1;
 		}
 
 		//Siempre realizamos el cleanup al final

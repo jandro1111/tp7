@@ -1,16 +1,16 @@
-#pragma once
 #ifndef CLASELCD1_H
 #define CLASELCD1_H
 
 #include "basicLCD.h"
+#include <string>
 #include <allegro5/display.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_ttf.h>
 
-#define ALTODISPLAY 100
-#define ANCHODISPLAY 800
-#define SIZEFUENTE 50
+#define ALTODISPLAY 230
+#define ANCHODISPLAY 850
+#define SIZEFUENTE 100
 #define BACKCOLOR (al_map_rgb(0, 0, 255))
 #define FONTCOLOR (al_map_rgb(0, 0, 0))
 #define POINTERCOLOR (al_map_rgb(255, 0, 0))
@@ -37,7 +37,7 @@ public:
     bool lcdSetCursorPosition(const cursorPosition pos);
     cursorPosition lcdGetCursorPosition();
 
-    bool lcdCharIn(cursorPosition, char);
+    bool lcdCharIn(cursorPosition, const unsigned char);
     bool lcdDisplayUpdate();
 
 private:

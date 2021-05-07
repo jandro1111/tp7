@@ -11,8 +11,8 @@ basicLCD::~basicLCD() {
 }
 /// my lcd
 mylcd::mylcd() {
-	fuente = al_load_ttf_font("7SDD.ttf", 36, 0);
-	displaylcd = al_create_display(600, 400);
+	fuente = al_load_ttf_font("Montserrat-Black.ttf", 60, 0);
+	displaylcd = al_create_display(550, 150);
 	al_set_window_title(displaylcd, "Display 2");
 	cursor.column = 0;
 	cursor.row = 0;
@@ -205,8 +205,8 @@ void mylcd::printdisp() {
 		//cout << endl;
 	}
 	//cout << endl;//algo
-	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0, 0, ALLEGRO_ALIGN_LEFT, aux.c_str());
-	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0 , 30, ALLEGRO_ALIGN_LEFT, aux1.c_str());
+	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0, 10, ALLEGRO_ALIGN_LEFT, aux.c_str());
+	al_draw_text(fuente, al_map_rgb(255, 255, 255), 0 , 70, ALLEGRO_ALIGN_LEFT, aux1.c_str());
 	al_flip_display();
 }
 void mylcd::dispmoveleft() {
