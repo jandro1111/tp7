@@ -19,6 +19,4 @@ int init_allegro() {            // incio allegro
 
 void destroy_allegro(void) {
     al_shutdown_image_addon();
-    //al_shutdown_font_addon();
-    //al_shutdown_ttf_addon();
 }

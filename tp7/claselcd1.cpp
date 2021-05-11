@@ -23,9 +23,6 @@ bool claselcd1::lcdInitOk()
 	if (displaylcd1 == NULL || fuente == NULL)	//Si no se inicializaron correctamente
 	{
 		cout << "Display or Font could not be initiated." << endl;
-		//errorptr->ErrorName = "Display Or Font Init";
-		//errorptr->ErrorDescription = "Display or Font could not be initiated.";
-		//errorptr->ErrorCode = DISPLAY;
 		return false;
 	}
 	return true;
@@ -44,9 +41,6 @@ bool claselcd1::lcdClear()
 	cursor = { 0, 0 };	//Pone el cursor en la posicion original
 	if (!lcdDisplayUpdate())
 	{
-		//errorptr->ErrorName = "Display Not Updated";
-		//errorptr->ErrorDescription = "The Display Could Not Be Updated.";
-		//errorptr->ErrorCode = DISPLAY;
 		return false;
 	}
 	return true;
@@ -61,9 +55,6 @@ bool claselcd1::lcdClearToEOL()
 	}
 	if (!lcdDisplayUpdate())
 	{
-		//errorptr->ErrorName = "Display Not Updated";
-		//errorptr->ErrorDescription = "The Display Could Not Be Updated.";
-		//errorptr->ErrorCode = DISPLAY;
 		return false;
 	}
 	return true;
@@ -97,9 +88,6 @@ bool claselcd1::lcdMoveCursorUp()
 	cursorPosition tempcursor = { (cursor.row) -1, cursor.column };	//Mueve el cursor hacia arriba
 	if (!lcdSetCursorPosition(tempcursor))
 	{
-		//errorptr->ErrorName = "Cursor Limit";
-		//errorptr->ErrorDescription = "Can't Move Cursor Up.";
-		//errorptr->ErrorCode = CURSOR;
 		return false;
 	}
 	return true;
@@ -110,9 +98,6 @@ bool claselcd1::lcdMoveCursorDown()	//Mueve el cursor hacia abajo
 	cursorPosition tempcursor = { (cursor.row) + 1, cursor.column };
 	if (!lcdSetCursorPosition(tempcursor))
 	{
-		//errorptr->ErrorName = "Cursor Limit";
-		//errorptr->ErrorDescription = "Can't Move Cursor Down.";
-		//errorptr->ErrorCode = CURSOR;
 		return false;
 	}
 	return true;
@@ -133,9 +118,6 @@ bool claselcd1::lcdMoveCursorRight()
 		}
 		if (!lcdSetCursorPosition(tempcursor))
 		{
-			//errorptr->ErrorName = "Cursor Limit";
-			//errorptr->ErrorDescription = "Can't Move Cursor Right.";
-			//errorptr->ErrorCode = CURSOR;
 			return false;
 		}
 	}
@@ -157,9 +139,6 @@ bool claselcd1::lcdMoveCursorLeft()
 		}
 		if (!lcdSetCursorPosition(tempcursor))
 		{
-			//errorptr->ErrorName = "Cursor Limit";
-			//errorptr->ErrorDescription = "Can't Move Cursor Left.";
-			//errorptr->ErrorCode = CURSOR;
 			return false;
 		}
 	}
@@ -176,9 +155,6 @@ bool claselcd1::lcdSetCursorPosition(const cursorPosition pos)
 	}
 	else
 	{
-		//errorptr->ErrorName = "Invalida Cursor";
-		//errorptr->ErrorDescription = "The Cursor Position is Invalid.";
-		//errorptr->ErrorCode = CURSOR;
 		return false;
 	}
 }
@@ -195,13 +171,6 @@ bool claselcd1::lcdCharIn(cursorPosition pos, const unsigned char character)
 		text[((cursor.row) * 16) + (cursor.column)] = character;
 		lcdDisplayUpdate();
 		return true;
-		//}
-		//else
-		//{
-		//	//errorptr->ErrorName = "Invalida Character";
-		//	//errorptr->ErrorDescription = "One or more characters entered were invalid and ignored.";
-		//	//errorptr->ErrorCode = CHARACTER;
-		//}
 	}
 	return false;
 }

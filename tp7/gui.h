@@ -23,7 +23,7 @@ void gui_uninst(void);
 //Permite el ingreso de usuario y cantidad de tweets a descargar
 void gui_input(int& flag, int& canttwits, string& autor);
 //Permite cancelar la descarga
-void gui_searching(int& flag, int downtwits);
+void gui_searching(int& flag);
 //Permite navegar por los tweets descargados
 void gui_showtw(int& flag, float& vel);
 //Permite descargar mas tweets o terminar con la ejecucion

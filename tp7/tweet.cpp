@@ -1,7 +1,7 @@
 #include "tweet.h"
 using json = nlohmann::json;
 
-int dostuff(string autor, std::list<twits>& tweet, string& error) {
+int dostuff(string autor, std::list<twits>& tweet, string& error, int& boton, basicLCD** lcd, bool* islcd, bool& prog_exit) {
 	json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 	// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -149,12 +149,26 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 
 		//Realizamos ahora un perform no bloqueante
 		curl_multi_perform(multiHandle, &stillRunning);
-		while (stillRunning)
+		int pos = 0;
+		while (stillRunning && (boton != EXIT || readString.empty()))
 		{
 			//Debemos hacer polling de la transferencia hasta que haya terminado
 			curl_multi_perform(multiHandle, &stillRunning);
-
-			//Mientras tanto podemos hacer otras cosas
+			gui_searching(boton); //se llama a la gui para poder cambiar de display mientras se cargan los tweets
+			changedisplay(boton, islcd, lcd);
+			for (int i = 0; i < 3; i++)
+			{
+				if (islcd[i] == true)
+				{
+					pantallacarga(pos, lcd[i], autor, islcd, prog_exit);	//Muestra la pantalla de carga mientras se descargan
+				}
+			}
+			pos++;
+			if (pos == 19)
+			{
+				pos = -1;
+			}
+			al_rest(0.05);
 		}
 
 		//Checkeamos errores
@@ -163,12 +177,24 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 			error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 			//Hacemos un clean up de curl antes de salir.
 			curl_easy_cleanup(curl);
-			return 0;
+			return 1;
 		}
 
 		//Siempre realizamos el cleanup al final
 		curl_easy_cleanup(curl);
 
+		size_t ptr = 0;
+		size_t end = readString.length();
+		if (readString.back() != ']' || readString[(readString.length() - 1)] != '}')
+		{
+			ptr = readString.rfind("{\"created_at");
+			ptr -= 1;
+			readString[ptr] = ']';
+			for (size_t i = ptr + 1; i < end; i++)
+			{
+				readString.pop_back();
+			}
+		}
 		//Si el request de CURL fue exitoso entonces twitter devuelve un JSON
 		//con toda la informacion de los tweets que le pedimos
 		j = json::parse(readString);
@@ -193,7 +219,7 @@ int dostuff(string autor, std::list<twits>& tweet, string& error) {
 	return 0;
 }
 
-int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
+int dostuff(string autor,int cant, std::list<twits>& tweet, string& error, int& boton, basicLCD** lcd, bool* islcd, bool& prog_exit) {
 		json j;                    //Variable donde vamos a guardar lo que devuelva Twitter
 
 		// Vamos a utilizar la librería CURL ya que debemos conectarons a un servidor HTTPS
@@ -275,7 +301,7 @@ int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
 				error = "curl_easy_perform() failed: " + string(curl_easy_strerror(res));
 				//Hacemos un clean up de curl antes de salir.
 				curl_easy_cleanup(curl);
-				return 0;
+				return 1;
 			}
 
 			// Si no hubo errores hago un clean up antes de realizar un nuevo query.
@@ -342,12 +368,26 @@ int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
 
 		//Realizamos ahora un perform no bloqueante
 		curl_multi_perform(multiHandle, &stillRunning);
-		while (stillRunning)
+		int pos = 0;
+		while (stillRunning && (boton != EXIT || readString.empty()))
 		{
 			//Debemos hacer polling de la transferencia hasta que haya terminado
 			curl_multi_perform(multiHandle, &stillRunning);
-
-			//Mientras tanto podemos hacer otras cosas
+			gui_searching(boton); //se llama a la gui para poder cambiar de display mientras se cargan los tweets
+			changedisplay(boton, islcd, lcd);
+			for (int i = 0; i < 3; i++)
+			{
+					if (islcd[i] == true)
+				{
+					pantallacarga(pos, lcd[i], autor, islcd, prog_exit);	//Muestra la pantalla de carga mientras se descargan
+				}
+			}
+			pos++;
+			if (pos == 19)
+			{
+				pos = -1;
+			}
+			al_rest(0.05);
 		}
 
 		//Checkeamos errores
@@ -362,6 +402,18 @@ int dostuff(string autor,int cant, std::list<twits>& tweet, string& error) {
 		//Siempre realizamos el cleanup al final
 		curl_easy_cleanup(curl);
 
+		size_t ptr = 0;
+		size_t end = readString.length();
+		if (readString.back() != ']' || readString[(readString.length() - 1)] != '}')
+		{
+			ptr = readString.rfind("{\"created_at");
+			ptr -= 1;
+			readString[ptr] = ']';
+			for (size_t i = ptr+1; i < end; i++)
+			{
+				readString.pop_back();
+			}
+		}
 		//Si el request de CURL fue exitoso entonces twitter devuelve un JSON
 		//con toda la informacion de los tweets que le pedimos
 		j = json::parse(readString);
@@ -447,7 +499,7 @@ std::string dateadj(std::string date) {// Tue May 04 16:30:27 +0000 2021 en vez 
 	aux2 += buffer[4];
 	aux2 += buffer[5];
 	aux2 += buffer[6];
-	if (aux2=="Jan") {
+	if (aux2=="Jan") {//parseo feo para la fecha
 		aux[3] = '0';
 		aux[4] = '1';
 	}
@@ -533,7 +585,7 @@ std::string dateadj(std::string date) {// Tue May 04 16:30:27 +0000 2021 en vez 
 		aux[i] = buffer[i];
 	}
 	date = aux;
-	date.resize(16);
+	date.resize(16);//lo ajusto al tamaño del lcd
 	date.shrink_to_fit();
 	std::cout << date << std::endl;
 	return date;

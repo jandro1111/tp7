@@ -14,27 +14,26 @@ bool inits() //inicializacion de allegro y la gui
 	return false;
 }
 
-bool curltweets(int& canttwits, string& autor, list<twits>& tweet, string& errorcurl)
+//llama a las funciones que bajan los tweets, dependiendo si se especifico la cantidad de tweets o no
+bool curltweets(int& canttwits, string& autor, list<twits>& tweet, string& errorcurl, int& boton, basicLCD** lcd, bool* islcd, bool& prog_exit)
 {
 	bool error = false;
 	if (canttwits <= 0)
 	{
-		error = dostuff(autor, tweet, errorcurl);
+		error = dostuff(autor, tweet, errorcurl, boton, lcd, islcd, prog_exit);
 		canttwits = 20;
 	}
 	else
 	{
-		error = dostuff(autor, canttwits, tweet, errorcurl);
+		error = dostuff(autor, canttwits, tweet, errorcurl, boton, lcd, islcd, prog_exit);
 	}
 	return error;
 }
 
-void curlerror(basicLCD* lcd, string& errorcurl) //descarga los tweets
+void curlerror(basicLCD* lcd, string& errorcurl) //muestra errores al descargar los tweets
 {
 	cursorPosition cursor;
 	bool exit_screen = false;
-	if (errorcurl != "NoError") //si hubo un error al descargar los tweets, se muestra en el display un mensaje de error
-	{
 		char* errorcurlstr = &errorcurl[0];
 		while (exit_screen == false)
 		{
@@ -58,18 +57,16 @@ void curlerror(basicLCD* lcd, string& errorcurl) //descarga los tweets
 			al_rest(0.1); //pausa para que no se pasen tan rapido los tweets en el display
 		}
 		exit_screen = false;
-	}
 }
 
-void pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet, list<twits>::iterator& twit, bool* islcd, bool& exit) //muestra la pantalla de carga en el display
+void pantallacarga(int& pos, basicLCD* lcd, string autor, bool* islcd, bool& exit) //muestra la pantalla de carga en el display
 {
 	cursorPosition cursor;
 	cursor = { 0,0 };
 	lcd->lcdSetCursorPosition(cursor);
-	*lcd << (&(twit->author)[0]); //muestra el autor mietras se cargan los tweets
+	*lcd << (autor.c_str()); //muestra el autor mietras se cargan los tweets
 	cursor = { 1,0 };
 	lcd->lcdSetCursorPosition(cursor);
-	static long count = 0;
 	for (int i = 0; i < 16; i++)
 	{
 		if (i >= 0 && i > (pos - 4) && i <= (pos))
@@ -80,12 +77,6 @@ void pantallacarga(int& pos, int& boton, basicLCD* lcd, list<twits>& tweet, list
 		{
 			*lcd << ' ';
 		}
-	}
-	count++;
-	if (count == 40)
-	{
-		boton = CANCEL;
-		count = 0;
 	}
 }
 

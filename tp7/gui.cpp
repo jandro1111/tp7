@@ -116,7 +116,7 @@ void gui_input(int& flag, int& canttwits, string& autor)  //crea la primera gui 
 	flag = DONO;
 }
 
-void gui_searching(int& flag, int downtwits)  //crea la gui que se muestra mientras cargan los tweets
+void gui_searching(int& flag)  //crea la gui que se muestra mientras cargan los tweets
 {
 		al_set_target_backbuffer(displaygui);
 		ALLEGRO_EVENT ev;
@@ -128,7 +128,6 @@ void gui_searching(int& flag, int downtwits)  //crea la gui que se muestra mient
 		ImGui_ImplAllegro5_NewFrame();
 		ImGui::NewFrame();
 		ImGui::Begin("SEARCHING");
-		ImGui::Text("Se bajaron %d tweets.", downtwits);  //muestra la cantidad de tweets que fueron descargados
 		if (ImGui::Button("Cancel")) {
 			flag = EXIT;
 		}

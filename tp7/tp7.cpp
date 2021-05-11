@@ -1,5 +1,3 @@
-#include "header.h"
-#include "tweet.h"
 #include "logic.h"
 //Vamos a usar la librería NLOHMANN JSON 
 
@@ -22,7 +20,7 @@ int main(void)
 
 	bool islcd[3] = { true, false, false };
 	string autor = "";	//Guarda el usuario a buscar
-	string errorcurl = "NoError";
+	string errorcurl = "NoError";	//Error que devuelve el curl
 	claselcd1 lcd1;
 	mylcd lcd2;
 	displayTrini lcd3;
@@ -57,8 +55,8 @@ int main(void)
 		if (boton != EXIT && prog_exit == false)
 		{
 			tweet.clear();
-			prog_exit = curltweets(canttwits, autor, tweet, errorcurl);	//Se descargan los tweets
-			if (prog_exit == true)
+			prog_exit = curltweets(canttwits, autor, tweet, errorcurl, boton, lcd, islcd, prog_exit);	//Se descargan los tweets
+			if (prog_exit == true && errorcurl != "NoError")	//Se muestran los errores devueltos
 			{
 				for (int i = 0; i < 3; i++)
 				{
@@ -73,28 +71,10 @@ int main(void)
 				}
 				al_rest(2);
 			}
+
 			if ( (tweet.size() != 0) && (prog_exit == false))	//Si la lista no esta vacia
 			{
 				twit = tweet.begin();
-				int pos = 0;
-				while (boton != CANCEL && boton != EXIT)
-				{
-					gui_searching(boton, (int)tweet.size()); //se llama a la gui para poder cambiar de display mientras se cargan los tweets
-					changedisplay(boton, islcd, lcd);
-					for (int i = 0; i < 3; i++)
-					{
-						if (islcd[i] == true)
-						{
-							pantallacarga(pos, boton, lcd[i], tweet, twit, islcd, prog_exit);	//Muestra la pantalla de carga mientras se descargan
-						}
-					}
-					pos++;
-					if (pos == 19)
-					{
-						pos = -1;
-					}
-					al_rest(0.05);
-				}
 				boton = DONO;
 				for (int i = 0; i < 3; i++)
 				{

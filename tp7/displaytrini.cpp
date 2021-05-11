@@ -15,7 +15,6 @@ displayTrini::displayTrini() {
 	initOk = allegroInit();
 	lcdClear();
 	if (!lcdInitOk()) {
-		//error.setError ("Init error", "No se inicializo bien allegro", ALINIT);
 		allegroDestroy();
 	}
 }
@@ -67,7 +66,6 @@ bool displayTrini::lcdMoveCursorUp() {
 		return true;
 	}
 	else {
-		//error.setError("MoveCursorUp error", "El cursor se encontraba la primera linea", UP_BOUNDARY);
 		return false;
 	}
 }
@@ -79,12 +77,11 @@ bool displayTrini::lcdMoveCursorDown() {
 		return true;
 	}
 	else {
-		//error.setError("MoveCursorDown error", "El cursor se encontraba la ultima linea", DOWN_BOUNDARY);
 		return false;
 	}
 }
 
-bool displayTrini::lcdMoveCursorRight() {  //ACORDARME DE ESTE CAMBIO, CUANDO EL CURSOR LLEGA AL FINAL DEL DISPLAY VUELVE AL INICIO
+bool displayTrini::lcdMoveCursorRight() {  
 	if (cursor.column < COLMAX) {
 		cursor.column += 1;
 		draw();
@@ -96,7 +93,6 @@ bool displayTrini::lcdMoveCursorRight() {  //ACORDARME DE ESTE CAMBIO, CUANDO EL
 		return true;
 	}
 	else if ((cursor.row == (FILAMAX - 1)) && (cursor.column == (COLMAX - 1))) {
-		//error.setError("MoveCursorRight error", "El cursor se encontraba al final del display", RIGHT_BOUNDARY);
 		cursor.row = FILAMIN;
 		cursor.column = COLMIN;
 		return true;
@@ -116,7 +112,6 @@ bool displayTrini::lcdMoveCursorLeft() {
 		return true;
 	}
 	else if ((cursor.row == FILAMIN) && (cursor.column == COLMIN)) {
-		//error.setError("MoveCursorLeft error", "El cursor se encontraba al principio del display", LEFT_BOUNDARY);
 		return false;
 	}
 	return false;
@@ -155,8 +150,6 @@ basicLCD& displayTrini::operator<<(const unsigned char c) {
 }
 
 basicLCD& displayTrini::operator<<(const char* c) {
-	//string lcdString;
-	//string temp = ((const char*)c);
 	int size = 0;
 	char term = *c;
 	int i = 0;
@@ -174,20 +167,10 @@ basicLCD& displayTrini::operator<<(const char* c) {
 		{
 			int i = cursor.row;
 			int j = cursor.column;
-			str[i][j] = *(c + i * FILAMAX + j);
+			str[i][j] = *(c + (i * COLMAX) + j);
 			cont++;
 			lcdMoveCursorRight();
 		}
-		//if ((cursor.column * cursor.row) < (FILAMAX * COLMAX))
-		//{
-		//	for (int fil = cursor.row; fil < FILAMAX; fil++)
-		//	{
-		//		for (int col = cursor.column; col < COLMAX; col++)
-		//		{
-		//			str[fil][col] = ' ';
-		//		}
-		//	}
-		//}
 	}
 	else //Si el string es mas largo que el display, solo se muestra la ultima parte
 	{
@@ -199,69 +182,6 @@ basicLCD& displayTrini::operator<<(const char* c) {
 			}
 		}
 	}
-
-	//	lcdString.reserve(FILAMAX * COLMAX);
-		//for (int i = 0; i < FILAMAX; i++) {
-		//	lcdString += this->str[i];
-		//}
-		//lcdString.resize(32);
-
-		//if (temp.size() <= 32) {
-		//	while ((size_t)CURSOR_POSITION > lcdString.length()) {
-		//		lcdString += ' ';
-		//	}
-
-		//	int totalNewPosition = 0;
-		//	cursorPosition cur = { 0, 0 };
-
-		//	if (CURSOR_POSITION + temp.size() < FILAMAX * COLMAX) {
-		//		lcdString.replace(CURSOR_POSITION, temp.size(), temp);
-
-		//		totalNewPosition = (int)temp.size() + CURSOR_POSITION;
-		//	}
-		//	else {
-		//		size_t charsCopied = FILAMAX * COLMAX - CURSOR_POSITION;
-		//		lcdString.replace(CURSOR_POSITION, charsCopied, temp, 0, charsCopied);
-		//		lcdString.replace(0, temp.size() - charsCopied, temp, charsCopied, temp.size() - charsCopied);
-
-		//		totalNewPosition = (int)(temp.size() - charsCopied);
-		//	}
-		//	if (totalNewPosition % (FILAMAX * COLMAX) == 0) {
-		//		cur.row = 0;
-		//		cur.column = 0;
-		//	}
-		//	else {
-		//		cur.row = (int)(totalNewPosition / (FILAMAX * COLMAX));
-		//		cur.column = (int)(totalNewPosition - cur.row * (FILAMAX * COLMAX));
-		//	}
-
-		//	lcdSetCursorPosition(cur);
-		//}
-		//else {
-		//	//error.setError("Writing exceeded error", "El maximo largo es de 32 caracteres", WRITING_EXCEEDED);
-		//	lcdString.assign(temp, temp.length() - FILAMAX * COLMAX, FILAMAX * COLMAX);
-		//	cursorPosition cur = { 0, 0 };
-		//}
-
-		//string piece;
-		//bool foundEndOfString = false;
-		//for (int i = 0; i < FILAMAX; i++) {
-		//	piece = lcdString.substr(piece.size() * i, COLMAX);
-		//	const char* newStr = piece.c_str();
-
-		//	for (int j = 0; j < COLMAX; j++) {
-		//		if (!foundEndOfString) {
-		//			str[i][j] = *(newStr + j);
-		//		}
-		//		else {
-		//			str[i][j] = '\0';
-		//		}
-
-		//		if (*(newStr + j) == '\0') {
-		//			foundEndOfString = true;
-		//		}
-		//	}
-		//}
 	draw();
 	return *this;
 }
@@ -270,62 +190,28 @@ basicLCD& displayTrini::operator<<(const char* c) {
 * Funciones de allegro
 *
 *******************************************************/
-
+//inicializa allegro
 bool displayTrini::allegroInit() {
-	//ALLEGRO AND ALLEGRO ADDONS INITIALIZATION
-	/*if (!al_init()) {
-		fprintf(stderr, "Failed to initialize allegro!\n");
-		return false;
-	}*/
-	/*if (!al_init_image_addon()) {
-		fprintf(stderr, "Failed to initialize image addon!\n");
-		return false;
-	}
-	if (!al_init_font_addon()) {
-		fprintf(stderr, "Failed to initialize allegro fonts!\n");
-		return false;
-	}
-	if (!al_init_ttf_addon()) {
-		fprintf(stderr, "Failed to initialize allegro ttf fonts!\n");
-		return false;
-	}*/
 	if (!(all.display = al_create_display(WIDTH, HEIGHT))) {
 		cout << "failed to create display!" << endl;
-		//error.setError("Display error", "No se pudo inicializar el display", DISPLAY);
 		return false;
 	}
 	al_set_window_title(all.display, "Display 3");
 	if (!(all.font = al_load_ttf_font(FONT_TRINI, 80, 0))) {
 		cout << "failed to load font!" << endl;
 		al_destroy_display(all.display);
-		//error.setError("Font error", "No se pudo inicializar la fuente", FONT);
 		return false;
 	}
-	/*all.eventQueue = al_create_event_queue();
-	if (!all.eventQueue) {
-		cout << "failed to load event queue!" << endl;
-		al_destroy_display(all.display);
-		al_destroy_font(all.font);
-		return false;
-	}*/
-
 	al_flip_display();
-	//al_register_event_source(all.eventQueue, al_get_keyboard_event_source());              //Evento teclado      
-	//al_register_event_source(all.eventQueue, al_get_display_event_source(all.display));        //Cruz de salir
 	return true;
 }
 
+//dibuja el display con todos los caracteres
 void displayTrini::draw(void) {
 	al_set_target_backbuffer(all.display);
 	al_clear_to_color(ALLEGRO_COLOR(BLACK));
 
 	string helpMe;
-
-	// Ugly hack
-	/*helpMe = str[0];
-	while (helpMe.size() > COLMAX) {
-		helpMe.pop_back();
-	}*/
 	for (int i = 0; (i < 16) && (str[0][i] != '\0'); i++)
 	{
 		helpMe.push_back(str[0][i]);
@@ -333,11 +219,6 @@ void displayTrini::draw(void) {
 	helpMe.push_back('\0');
 	al_draw_textf(all.font, ALLEGRO_COLOR(WHITE), 0, 0, 0, "%s", helpMe.c_str());
 
-	// Ugly hack
-	/*helpMe = str[1];
-	while (helpMe.size() > COLMAX) {
-		helpMe.pop_back();
-	}*/
 	helpMe.clear();
 	for (int i = 0; (i < 16) && (str[1][i] != '\0'); i++)
 	{
@@ -349,11 +230,8 @@ void displayTrini::draw(void) {
 	al_flip_display();
 }
 
+//destruye los elementos de allegro
 void displayTrini::allegroDestroy() {
 	al_destroy_font(all.font);
-	//al_destroy_event_queue(all.eventQueue);
 	al_destroy_display(all.display);
-	//al_shutdown_font_addon();
-	//al_shutdown_ttf_addon();
-	//al_uninstall_keyboard();
 }
